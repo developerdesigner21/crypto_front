@@ -1,0 +1,30 @@
+{
+  "name": "cointex-nextjs-ts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+    
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.0-alpha1",
+    "chart.js": "^4.4.6",
+    "next": "15.0.3",
+    "next-pwa": "^5.6.0",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "sass": "^1.81.0",
+    "swiper": "^11.1.15"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10",
+    "@types/next-pwa": "^5.6.9",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}
