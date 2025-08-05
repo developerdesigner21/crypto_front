@@ -27,6 +27,35 @@ const Page: React.FC = () => {
                 <h4 className="d-inline-block text-primary">USD</h4>
               </div>
             </div>
+            
+            {/* TradingView Bitcoin Chart */}
+            <div className="mt-20">
+              <h5 className="text-center mb-12">Live Bitcoin Price</h5>
+              <div className="d-flex justify-content-center">
+                <div 
+                  style={{ 
+                    width: '100%', 
+                    position: 'relative',
+                    overflow: 'hidden',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
+                  }}
+                >
+                  <iframe 
+                    src="https://s.tradingview.com/widgetembed/?symbol=COINBASE%3ABTCUSD&interval=60&theme=dark" 
+                    width="100%" 
+                    height="400"
+                    style={{ 
+                      border: 'none', 
+                      borderRadius: '8px',
+                      display: 'block'
+                    }}
+                    title="Bitcoin Price Chart"
+                  />
+                </div>
+              </div>
+            </div>
+            
             <ul className="mt-20">
               <li>
                 <Link
