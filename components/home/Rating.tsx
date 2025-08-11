@@ -159,8 +159,8 @@ export default function Rating() {
             <ul className="mt-16">
               {coins.map((coin, index) => (
                 <li key={index} className="mt-16">
-                  <Link
-                    href={`/choose-payment`}
+                  <a
+                    href={`/coin/${coin.title}`}
                     className="coin-item style-2 gap-12"
                   >
                     <Image
@@ -182,7 +182,7 @@ export default function Rating() {
                         </span>
                       </div>
                     </div>
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

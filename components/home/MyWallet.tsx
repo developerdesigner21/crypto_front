@@ -1,6 +1,11 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { AiOutlineSwap } from "react-icons/ai";
+import { MdBackup } from "react-icons/md";
+import { BiCandles } from "react-icons/bi";
+import { SiBitcoin } from "react-icons/si";
+
 const accountOptions: string[] = ["Account 1", "Account 2"];
 export default function MyWallet() {
   const [accountOption, setAccountOption] = useState<string>(accountOptions[0]);
@@ -76,7 +81,7 @@ export default function MyWallet() {
             </li>
             <li>
               <Link
-                href={`/buy-quantity`}
+                href={`/buy`}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
@@ -97,6 +102,52 @@ export default function MyWallet() {
               </Link>
             </li>
           </ul>
+          <ul className="mt-16 grid-4 m--16">
+            <li>
+              <Link
+                href={`/swap`}
+                className="tf-list-item d-flex flex-column gap-8 align-items-center"
+              >
+                <span className="box-round bg-surface d-flex justify-content-center align-items-center">
+                  <AiOutlineSwap className="text-white w-8 h-8" />
+                </span>
+                Swap
+              </Link>
+            </li>
+            <li>
+              <Link
+                href={`/linkwallet`}
+                className="tf-list-item d-flex flex-column gap-8 align-items-center"
+              >
+                <span className="box-round bg-surface d-flex justify-content-center align-items-center">
+                  <MdBackup className="text-white w-8 h-8" />
+                </span>
+                Backup
+              </Link>
+            </li>
+            <li>
+              <Link
+                href={`/buy`}
+                className="tf-list-item d-flex flex-column gap-8 align-items-center"
+              >
+                <span className="box-round bg-surface d-flex justify-content-center align-items-center">
+                  <SiBitcoin className="text-white w-8 h-8" />
+                </span>
+                Mining
+              </Link>
+            </li>
+            <li>
+              <Link
+                href={`/earn`}
+                className="tf-list-item d-flex flex-column gap-8 align-items-center"
+              >
+                <span className="box-round bg-surface d-flex justify-content-center align-items-center">
+                  <BiCandles className="text-white w-8 h-8" />
+                </span>
+                Stock
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
       <>
@@ -114,9 +165,8 @@ export default function MyWallet() {
                   onClick={() => setAccountOption("Account 1")}
                 >
                   <div
-                    className={`d-flex justify-content-between gap-8 text-large item-check ${
-                      accountOption == accountOptions[0] ? "active" : ""
-                    }  dom-value`}
+                    className={`d-flex justify-content-between gap-8 text-large item-check ${accountOption == accountOptions[0] ? "active" : ""
+                      }  dom-value`}
                   >
                     Account 1 <i className="icon icon-check-circle" />
                   </div>
@@ -127,9 +177,8 @@ export default function MyWallet() {
                   data-bs-dismiss="modal"
                 >
                   <div
-                    className={`d-flex justify-content-between gap-8 text-large item-check ${
-                      accountOption == accountOptions[1] ? "active" : ""
-                    }  dom-value`}
+                    className={`d-flex justify-content-between gap-8 text-large item-check ${accountOption == accountOptions[1] ? "active" : ""
+                      }  dom-value`}
                   >
                     Account 2 <i className="icon icon-check-circle" />
                   </div>
