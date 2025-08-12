@@ -16,7 +16,7 @@ interface FeatureCardProps {
 const FeatureCard: React.FC<FeatureCardProps> = ({ iconSrc, iconBgColorClass, title, description, alt }) => {
     return (
         <a
-            href="#" // Replace with a relevant link if necessary, e.g., to a specific page
+            href="/start-boarding" // Replace with a relevant link if necessary, e.g., to a specific page
             className="group flex flex-col sm:flex-row items-start sm:items-center gap-4 p-6 sm:p-8 rounded-[30px]
                  bg-coiner-feature-card-bg-transparent text-white
                  transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl

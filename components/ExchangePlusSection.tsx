@@ -51,7 +51,7 @@ const ExchangePlusSection: React.FC = () => {
                         <a
                             href="#"
                             className="inline-block bg-white text-neutral-900 px-8 py-4 rounded-full font-semibold
-                         hover:bg-gray-100 transition-colors duration-300 w-full max-w-xs"
+                         hover:text-neutral-900 transition-colors duration-300 w-full max-w-xs"
                         >
                             Try Now
                         </a>

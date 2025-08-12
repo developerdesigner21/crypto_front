@@ -62,7 +62,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({ crypto }) => {
     return (
         // The entire card is now an anchor <a> element, making the whole area clickable.
         <a
-            href={`/crypto/${cryptoSlug}`} // Dynamic link for redirection
+            href={`/start-boarding`} // Dynamic link for redirection
             className="relative flex flex-col items-center p-8 pt-16 rounded-[40px] bg-coiner-card-bg-primary text-white
                  w-[320px] h-[450px] overflow-hidden group cursor-pointer
                  transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:shadow-2xl"

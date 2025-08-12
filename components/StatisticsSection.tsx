@@ -140,11 +140,11 @@ const StatisticsSection: React.FC = () => {
                         {/* Bitcoin Row */}
                         <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-200">
                             <div className="flex items-center">
-                                <img
+                                {/* <img
                                     src={BITCOIN_ICON_CDN_URL}
                                     alt="Bitcoin"
                                     className="w-8 h-8 mr-3 rounded-full"
-                                />
+                                /> */}
                                 <span className="font-semibold text-dark-text text-lg">
                                     Bitcoin <span className="text-gray-500 text-sm">BTC</span>
                                 </span>
@@ -172,11 +172,11 @@ const StatisticsSection: React.FC = () => {
                         <div className="pb-4 mb-4 border-b border-gray-200">
                             <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center">
-                                    <img
+                                    {/* <img
                                         src={ETHEREUM_ICON_CDN_URL}
                                         alt="Ethereum"
                                         className="w-8 h-8 mr-3 rounded-full"
-                                    />
+                                    /> */}
                                     <span className="font-semibold text-dark-text text-lg">
                                         Ethereum <span className="text-gray-500 text-sm">ETH</span>
                                     </span>
@@ -215,11 +215,11 @@ const StatisticsSection: React.FC = () => {
                         {/* Litecoin Row */}
                         <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-200">
                             <div className="flex items-center">
-                                <img
+                                {/* <img
                                     src={LITECOIN_ICON_CDN_URL}
                                     alt="Litecoin"
                                     className="w-8 h-8 mr-3 rounded-full"
-                                />
+                                /> */}
                                 <span className="font-semibold text-dark-text text-lg">
                                     Litecoin <span className="text-gray-500 text-sm">LTC</span>
                                 </span>
@@ -246,11 +246,11 @@ const StatisticsSection: React.FC = () => {
                         {/* Binance Row */}
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                                <img
+                                {/* <img
                                     src={BINANCE_ICON_CDN_URL}
                                     alt="Binance"
                                     className="w-8 h-8 mr-3 rounded-full"
-                                />
+                                /> */}
                                 <span className="font-semibold text-dark-text text-lg">
                                     Binance <span className="text-gray-500 text-sm">BNB</span>
                                 </span>
@@ -291,11 +291,11 @@ const StatisticsSection: React.FC = () => {
                                 className="w-full h-auto"
                             />
                             <div className="absolute bottom-0 left-0 flex items-center bg-white rounded-full p-2 pr-3 shadow-md -mb-3">
-                                <img
+                                {/* <img
                                     src={ETHEREUM_ICON_CDN_URL}
                                     alt="Ethereum Small"
                                     className="w-5 h-5 mr-1"
-                                />
+                                /> */}
                                 <span className="text-coiner-green text-xs font-semibold">
                                     +6.58%
                                 </span>
