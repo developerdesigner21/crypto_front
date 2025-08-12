@@ -12,7 +12,6 @@ export default function MyWallet() {
   // Use the correct type for modalElement
   const modalElement = useRef<HTMLDivElement | null>(null);
 
-  
   useEffect(() => {
     const body = document.body;
 
@@ -51,7 +50,7 @@ export default function MyWallet() {
             <span className="text-primary">My Wallet</span> 
           </h5>
           <h1 className="mt-16">
-            <a href="#">$2159,34</a>
+            <a href="#">$0.00</a>
           </h1>
           <ul className="mt-16 grid-4 m--16">
             <li>

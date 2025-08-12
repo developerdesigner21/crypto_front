@@ -29,7 +29,9 @@ export default function Rating() {
   useEffect(() => {
     const fetchWallets = async () => {
       try {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/get_wallets`); // adjust path if different
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/get_wallets`
+        ); // adjust path if different
         if (res.data.status_code) {
           setCoins(res.data.data);
         }
@@ -44,7 +46,7 @@ export default function Rating() {
     fetchWallets();
   }, []);
 
-  const filteredCoins = coins.filter((coin : any ) => {
+  const filteredCoins = coins.filter((coin: any) => {
     if (activeTab === "favorite") {
       return coin.type === "favorite";
     }
@@ -55,7 +57,35 @@ export default function Rating() {
   });
 
   if (loading) {
-    return <div className="text-center p-4">Loading...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "16px",
+        }}
+      >
+        <div
+          style={{
+            border: "4px solid #f3f3f3",
+            borderTop: "4px solid #3498db",
+            borderRadius: "50%",
+            width: "32px",
+            height: "32px",
+            animation: "spin 0.8s linear infinite",
+          }}
+        />
+        <style>
+          {`
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `}
+        </style>
+      </div>
+    );
   }
 
   return (
@@ -109,7 +139,9 @@ export default function Rating() {
                 const coinName = Object.keys(coin.unique_id)[0];
                 const coinData = coin.unique_id[coinName];
                 const coinlink = coin.link;
-                const price = coinData ? `$${coinData.usd.toLocaleString()}` : "N/A";
+                const price = coinData
+                  ? `$${coinData.usd.toLocaleString()}`
+                  : "N/A";
                 const change =
                   coinData && coinData.usd_24h_change
                     ? `${coinData.usd_24h_change.toFixed(2)}%`
@@ -125,7 +157,6 @@ export default function Rating() {
                       href={`/coin/${coinName}`}
                       className="coin-item style-2 gap-12"
                     >
-
                       <Image
                         alt="coin"
                         className="img"
@@ -136,7 +167,9 @@ export default function Rating() {
                       <div className="content">
                         <div className="title">
                           <p className="mb-4 text-button">{coinName}</p>
-                          <span className="text-secondary">{coin.market_cap}</span>
+                          <span className="text-secondary">
+                            {coin.market_cap}
+                          </span>
                         </div>
                         <div className="d-flex align-items-center gap-12">
                           <span className="text-small">{price}</span>
@@ -153,6 +186,6 @@ export default function Rating() {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }

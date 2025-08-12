@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -7,7 +7,53 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Chart1 from "./charts/Chart1";
 import Chart2 from "./charts/Chart2";
 import Chart3 from "./charts/Chart3";
+import axios, { AxiosError } from "axios";
+
+interface Wallet {
+  id: number;
+  name: string;
+  is_active: number;
+  unique_id: {
+    [coinName: string]: {
+      usd: number;
+      usd_24h_change: number;
+    } | null;
+  };
+  icon: string;
+  link: string;
+  market_cap: string;
+}
+
 export default function Market() {
+  const [mounted, setMounted] = useState(false);
+  const [coins, setCoins] = useState<Wallet[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const fetchWallets = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:1000/api/wallet/get_wallets"
+        ); // adjust path if different
+        if (res.data.status_code) {
+          setCoins(res.data.data);
+        }
+      } catch (err) {
+        const error = err as AxiosError<{ msg: string }>;
+        alert(error.response?.data?.msg || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWallets();
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <div className="bg-menuDark tf-container">
       <div className="pt-12 pb-12 mt-4">
@@ -15,7 +61,7 @@ export default function Market() {
         <Swiper
           className="swiper tf-swiper swiper-wrapper-r mt-16"
           spaceBetween={16}
-          slidesPerView={2.8}
+          slidesPerView={3.1}
         >
           <SwiperSlide className="swiper-slide">
             <Link href={`/exchange-market`} className="coin-box d-block">
@@ -36,9 +82,29 @@ export default function Market() {
                 <Chart1 />
               </div>
               <div className="coin-price d-flex justify-content-between">
-                <span>$30780</span>
-                <span className="text-primary d-flex align-items-center gap-2">
-                  <i className="icon-select-up" /> 11,75%
+                <span>
+                  {loading
+                    ? "$0.00"
+                    : `$${
+                        coins
+                          .find((c) => c.name.trim() === "BTC")
+                          ?.unique_id?.BTC?.usd?.toLocaleString() || "0.00"
+                      }`}
+                </span>
+                <span
+                  className={`d-flex align-items-center gap-2 ${
+                    (coins.find((c) => c.name.trim() === "BTC")?.unique_id
+                      ?.BTC?.usd_24h_change ?? 0) < 0
+                      ? "text-danger"
+                      : "text-primary"
+                  }`}
+                >
+                  {loading
+                    ? "0.00"
+                    : `$${(
+                        coins.find((c) => c.name.trim() === "BTC")?.unique_id
+                          ?.BTC?.usd_24h_change ?? 0
+                      ).toFixed(2)}`}
                 </span>
               </div>
               <div className="blur bg1"></div>
@@ -55,17 +121,37 @@ export default function Market() {
                   height={77}
                 />
                 <div className="title">
-                  <p>Binance</p>
-                  <span>BNB</span>
+                  <p>HYPE</p>
+                  <span>HYPE</span>
                 </div>
               </div>
               <div className="mt-8 mb-8 coin-chart">
                 <Chart2 />
               </div>
               <div className="coin-price d-flex justify-content-between">
-                <span>$270.10</span>
-                <span className="text-primary d-flex align-items-center gap-2">
-                  <i className="icon-select-up" /> 21,59%
+                <span>
+                  {loading
+                    ? "$0.00"
+                    : `$${
+                        coins
+                          .find((c) => c.name.trim() === "HYPE")
+                          ?.unique_id?.HYPE?.usd?.toLocaleString() || "0.00"
+                      }`}
+                </span>
+                <span
+                  className={`d-flex align-items-center gap-2 ${
+                    (coins.find((c) => c.name.trim() === "HYPE")?.unique_id
+                      ?.HYPE?.usd_24h_change ?? 0) < 0
+                      ? "text-danger"
+                      : "text-primary"
+                  }`}
+                >
+                  {loading
+                    ? "0.00"
+                    : `$${(
+                        coins.find((c) => c.name.trim() === "HYPE")?.unique_id
+                          ?.HYPE?.usd_24h_change ?? 0
+                      ).toFixed(2)}`}
                 </span>
               </div>
               <div className="blur bg2"></div>
@@ -90,9 +176,29 @@ export default function Market() {
                 <Chart3 />
               </div>
               <div className="coin-price d-flex justify-content-between">
-                <span>$1478.10</span>
-                <span className="text-primary d-flex align-items-center gap-2">
-                  <i className="icon-select-up" /> 4,75%
+                <span>
+                  {loading
+                    ? "$0.00"
+                    : `$${
+                        coins
+                          .find((c) => c.name.trim() === "ETH")
+                          ?.unique_id?.ETH?.usd?.toLocaleString() || "0.00"
+                      }`}
+                </span>
+                <span
+                  className={`d-flex align-items-center gap-2 ${
+                    (coins.find((c) => c.name.trim() === "ETH")?.unique_id
+                      ?.ETH?.usd_24h_change ?? 0) < 0
+                      ? "text-danger"
+                      : "text-primary"
+                  }`}
+                >
+                  {loading
+                    ? "0.00"
+                    : `$${(
+                        coins.find((c) => c.name.trim() === "ETH")?.unique_id
+                          ?.ETH?.usd_24h_change ?? 0
+                      ).toFixed(2)}`}
                 </span>
               </div>
               <div className="blur bg3"></div>
