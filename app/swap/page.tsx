@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { AiOutlineSwap } from "react-icons/ai";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import apiClient from "@/lib/axios-config";
 import "../../app/globals.css";
 
 export default function SwapForm() {
@@ -16,8 +17,9 @@ export default function SwapForm() {
   useEffect(() => {
     const fetchCoins = async () => {
     try {
-  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/get_wallets`);
-      if (data?.status_code && Array.isArray(data.data)) {
+      const { data } = await apiClient.get('/api/wallet/get_wallets');
+
+      if (data?.status_code) {
         const list: { label: string; value: string }[] = [];
         data.data.forEach((wallet: any) => {
           Object.keys(wallet.unique_id).forEach((coinName) => {
@@ -45,7 +47,7 @@ export default function SwapForm() {
     setLoading(true);
     setSwapResult(null);
     try {
-  const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/swap`, {
+  const { data } = await apiClient.post('/api/wallet/swap', {
         fromCoin,
         toCoin,
         amount,

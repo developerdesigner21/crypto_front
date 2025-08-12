@@ -2,7 +2,7 @@
 import Image from "next/image";
 import GoBackButton from "./BackButton";
 import { useState } from "react";
-import axios from "axios";
+import apiClient from "@/lib/axios-config";
 
 export default function ResetPass() {
   const [email, setEmail] = useState("");
@@ -18,7 +18,7 @@ export default function ResetPass() {
 
     setLoading(true);
     try {
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/forget_password`, { email });
+  const response = await apiClient.post('/api/auth/forget_password', { email });
 
       console.log("✅ API response:", response.data);
 

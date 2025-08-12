@@ -3,7 +3,8 @@
 import { useState } from "react";
 import GoBackButton from "./BackButton"; // adjust this import path as needed
 import { useRouter } from "next/navigation";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import apiClient from "@/lib/axios-config";
 
 
 export default function Register() {
@@ -30,7 +31,7 @@ export default function Register() {
     }
 
     try {
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/register`, {
+  const response = await apiClient.post('/api/auth/register', {
         username: formData.username,
         name: formData.name,
         email: formData.email,

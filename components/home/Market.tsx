@@ -7,7 +7,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Chart1 from "./charts/Chart1";
 import Chart2 from "./charts/Chart2";
 import Chart3 from "./charts/Chart3";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import apiClient from "@/lib/axios-config";
 
 interface Wallet {
   id: number;
@@ -36,9 +37,7 @@ export default function Market() {
   useEffect(() => {
     const fetchWallets = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:1000/api/wallet/get_wallets"
-        ); // adjust path if different
+        const res = await apiClient.get('/api/wallet/get_wallets');
         if (res.data.status_code) {
           setCoins(res.data.data);
         }
@@ -88,13 +87,13 @@ export default function Market() {
                     : `$${
                         coins
                           .find((c) => c.name.trim() === "BTC")
-                          ?.unique_id?.BTC?.usd?.toLocaleString() || "0.00"
+                          ?.unique_id?.bitcoin?.usd?.toLocaleString() || "0.00"
                       }`}
                 </span>
                 <span
                   className={`d-flex align-items-center gap-2 ${
                     (coins.find((c) => c.name.trim() === "BTC")?.unique_id
-                      ?.BTC?.usd_24h_change ?? 0) < 0
+                      ?.bitcoin?.usd_24h_change ?? 0) < 0
                       ? "text-danger"
                       : "text-primary"
                   }`}
@@ -103,7 +102,7 @@ export default function Market() {
                     ? "0.00"
                     : `$${(
                         coins.find((c) => c.name.trim() === "BTC")?.unique_id
-                          ?.BTC?.usd_24h_change ?? 0
+                          ?.bitcoin?.usd_24h_change ?? 0
                       ).toFixed(2)}`}
                 </span>
               </div>
@@ -135,13 +134,13 @@ export default function Market() {
                     : `$${
                         coins
                           .find((c) => c.name.trim() === "HYPE")
-                          ?.unique_id?.HYPE?.usd?.toLocaleString() || "0.00"
+                          ?.unique_id?.hyperliquid?.usd?.toLocaleString() || "0.00"
                       }`}
                 </span>
                 <span
                   className={`d-flex align-items-center gap-2 ${
                     (coins.find((c) => c.name.trim() === "HYPE")?.unique_id
-                      ?.HYPE?.usd_24h_change ?? 0) < 0
+                      ?.hyperliquid?.usd_24h_change ?? 0) < 0
                       ? "text-danger"
                       : "text-primary"
                   }`}
@@ -150,7 +149,7 @@ export default function Market() {
                     ? "0.00"
                     : `$${(
                         coins.find((c) => c.name.trim() === "HYPE")?.unique_id
-                          ?.HYPE?.usd_24h_change ?? 0
+                          ?.hyperliquid?.usd_24h_change ?? 0
                       ).toFixed(2)}`}
                 </span>
               </div>
@@ -182,13 +181,13 @@ export default function Market() {
                     : `$${
                         coins
                           .find((c) => c.name.trim() === "ETH")
-                          ?.unique_id?.ETH?.usd?.toLocaleString() || "0.00"
+                          ?.unique_id?.ethereum?.usd?.toLocaleString() || "0.00"
                       }`}
                 </span>
                 <span
                   className={`d-flex align-items-center gap-2 ${
                     (coins.find((c) => c.name.trim() === "ETH")?.unique_id
-                      ?.ETH?.usd_24h_change ?? 0) < 0
+                      ?.ethereum?.usd_24h_change ?? 0) < 0
                       ? "text-danger"
                       : "text-primary"
                   }`}
@@ -197,7 +196,7 @@ export default function Market() {
                     ? "0.00"
                     : `$${(
                         coins.find((c) => c.name.trim() === "ETH")?.unique_id
-                          ?.ETH?.usd_24h_change ?? 0
+                          ?.ethereum?.usd_24h_change ?? 0
                       ).toFixed(2)}`}
                 </span>
               </div>

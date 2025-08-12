@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
-import axios from "axios";
+import apiClient from "@/lib/axios-config";
 import GoBackButton from "./BackButton";
 
 export default function ChangePass() {
@@ -34,14 +34,9 @@ export default function ChangePass() {
 
     setLoading(true);
     try {
-      const response = await axios.post(
-  `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/set_new_password`,
-        { password: newPassword },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await apiClient.post(
+        '/api/auth/set_new_password',
+        { password: newPassword }
       );
 
       if (response.data.status_code) {

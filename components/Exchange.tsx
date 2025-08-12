@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import apiClient from "@/lib/axios-config";
 import { coins4 } from "@/data/coinItems";
 
 interface Wallet {
@@ -29,7 +30,7 @@ export default function Rating() {
   useEffect(() => {
     const fetchWallets = async () => {
       try {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/get_wallets`); // Adjust URL if needed
+        const res = await apiClient.get('/api/wallet/get_wallets');
         if (res.data.status_code) {
           setCoins(res.data.data);
         }

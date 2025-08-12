@@ -5,8 +5,8 @@ import GoBackButton from "./BackButton";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import axios, { AxiosError } from "axios";
-
+import { AxiosError } from "axios";
+import apiClient, { setAuthToken } from "@/lib/axios-config";
 
 
 export default function Login() {
@@ -29,7 +29,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login_with_password`, {
+  const response = await apiClient.post('/api/auth/login_with_password', {
         email: formData.email,
         password: formData.password,
       });
@@ -39,8 +39,8 @@ export default function Login() {
       if (response.data.status_code) {
         alert("✅ Login successful!");
 
-        // ✅ Save token if needed
-        localStorage.setItem("token", response.data.token);
+        // ✅ Save token using the helper function
+        setAuthToken(response.data.token);
 
         // ✅ Redirect to home
         router.push("/home");
