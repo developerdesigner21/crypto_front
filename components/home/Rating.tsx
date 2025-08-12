@@ -29,7 +29,7 @@ export default function Rating() {
   useEffect(() => {
     const fetchWallets = async () => {
       try {
-        const res = await axios.get("http://localhost:1000/api/wallet/get_wallets"); // adjust path if different
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/get_wallets`); // adjust path if different
         if (res.data.status_code) {
           setCoins(res.data.data);
         }

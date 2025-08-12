@@ -16,7 +16,7 @@ export default function SwapForm() {
   useEffect(() => {
     const fetchCoins = async () => {
     try {
-      const { data } = await axios.get("http://localhost:1000/api/wallet/get_wallets");
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/get_wallets`);
       if (data?.status_code && Array.isArray(data.data)) {
         const list: { label: string; value: string }[] = [];
         data.data.forEach((wallet: any) => {
@@ -45,7 +45,7 @@ export default function SwapForm() {
     setLoading(true);
     setSwapResult(null);
     try {
-      const { data } = await axios.post("http://localhost:1000/api/wallet/swap", {
+  const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/swap`, {
         fromCoin,
         toCoin,
         amount,

@@ -30,7 +30,7 @@ export default function Register() {
     }
 
     try {
-      const response = await axios.post("http://localhost:1000/api/auth/register", {
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/register`, {
         username: formData.username,
         name: formData.name,
         email: formData.email,

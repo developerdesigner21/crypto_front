@@ -35,7 +35,7 @@ export default function ChangePass() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:1000/api/auth/set_new_password",
+  `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/set_new_password`,
         { password: newPassword },
         {
           headers: {

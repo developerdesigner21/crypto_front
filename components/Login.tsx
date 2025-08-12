@@ -29,7 +29,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:1000/api/auth/login_with_password", {
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login_with_password`, {
         email: formData.email,
         password: formData.password,
       });
@@ -66,7 +66,7 @@ export default function Login() {
             <h2 className="text-center">Login Cointex</h2>
             <ul className="mt-40 socials-login">
               <li className="mt-12">
-                <Link href="http://localhost:1000/api/auth/google" className="tf-btn md social dark">
+                <Link href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/google`} className="tf-btn md social dark">
                   <Image
                     alt="img"
                     src="/images/logo/google.jpg"

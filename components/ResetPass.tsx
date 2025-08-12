@@ -18,7 +18,7 @@ export default function ResetPass() {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:1000/api/auth/forget_password", { email });
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/forget_password`, { email });
 
       console.log("✅ API response:", response.data);
 
