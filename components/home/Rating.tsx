@@ -1,83 +1,63 @@
-import React from "react";
+"use client";
+
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import axios, { AxiosError } from "axios";
 
-// Define a type for the coins array
-interface Coin {
-  imgSrc: string;
-  imgWidth: number;
-  imgHeight: number;
-  title: string;
-  marketCap: string;
-  price: string;
-  change: string;
-  changeClass: string;
+interface Wallet {
+  id: number;
+  name: string;
+  is_active: number;
+  unique_id: {
+    [coinName: string]: {
+      usd: number;
+      usd_24h_change: number;
+    } | null;
+  };
+  icon: string;
+  link: string;
+  market_cap: string;
 }
 
-const coins: Coin[] = [
-  {
-    imgSrc: "/images/coin/coin-6.jpg",
-    imgWidth: 64,
-    imgHeight: 65,
-    title: "ETH",
-    marketCap: "$360,6M",
-    price: "$1.878,80",
-    change: "-1,62%",
-    changeClass: "decrease",
-  },
-  {
-    imgSrc: "/images/coin/coin-7.jpg",
-    imgWidth: 59,
-    imgHeight: 60,
-    title: "arb_ETH",
-    marketCap: "$132,18M",
-    price: "$1.878,80",
-    change: "+1,62%",
-    changeClass: "increase",
-  },
-  {
-    imgSrc: "/images/coin/coin-8.jpg",
-    imgWidth: 64,
-    imgHeight: 65,
-    title: "WBTC",
-    marketCap: "$50,56M",
-    price: "$30.001,96",
-    change: "-1,64%",
-    changeClass: "decrease",
-  },
-  {
-    imgSrc: "/images/coin/coin-3.jpg",
-    imgWidth: 75,
-    imgHeight: 75,
-    title: "ARB",
-    marketCap: "$31,55M",
-    price: "$1,11",
-    change: "+3,71%",
-    changeClass: "increase",
-  },
-  {
-    imgSrc: "/images/coin/coin-9.jpg",
-    imgWidth: 64,
-    imgHeight: 65,
-    title: "WETH",
-    marketCap: "$24,34M",
-    price: "$1.878,56",
-    change: "-1,62%",
-    changeClass: "decrease",
-  },
-  {
-    imgSrc: "/images/coin/coin-10.jpg",
-    imgWidth: 64,
-    imgHeight: 65,
-    title: "MATIC",
-    marketCap: "$19,36M",
-    price: "$0,666",
-    change: "-4,42%",
-    changeClass: "decrease",
-  },
-];
-
 export default function Rating() {
+  const [coins, setCoins] = useState<Wallet[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"all" | "favorite" | "top">("all");
+
+  useEffect(() => {
+    const fetchWallets = async () => {
+      try {
+        const res = await axios.get("http://localhost:1000/api/wallet/get_wallets"); // adjust path if different
+        if (res.data.status_code) {
+          setCoins(res.data.data);
+        }
+      } catch (err) {
+        const error = err as AxiosError<{ msg: string }>;
+        alert(error.response?.data?.msg || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWallets();
+  }, []);
+
+  const filteredCoins = coins.filter((coin : any ) => {
+    if (activeTab === "favorite") {
+      return coin.type === "favorite";
+    }
+    if (activeTab === "top") {
+      return coin.type === "top";
+    }
+    return true;
+  });
+
+  if (loading) {
+    return <div className="text-center p-4">Loading...</div>;
+  }
+
   return (
     <div className="bg-menuDark tf-container">
       <div className="pt-12 pb-12 mt-4">
@@ -90,65 +70,32 @@ export default function Rating() {
           </h5>
 
           <div className="swiper-wrapper1 menu-tab-v3 mt-12" role="tablist">
+            {/* <div className="swiper-slide1 nav-link active">All</div>
+            <div className="swiper-slide1 nav-link">Favorites</div>
+            <div className="swiper-slide1 nav-link">Top</div> */}
             <div
-              className="swiper-slide1 nav-link active"
-              data-bs-toggle="tab"
-              data-bs-target="#favorites"
-              role="tab"
-              aria-controls="favorites"
-              aria-selected="true"
+              className={`nav-link ${activeTab === "all" ? "active" : ""}`}
+              onClick={() => setActiveTab("all")}
+            >
+              All
+            </div>
+            <div
+              className={`nav-link ${activeTab === "favorite" ? "active" : ""}`}
+              onClick={() => setActiveTab("favorite")}
             >
               Favorites
             </div>
             <div
-              className="swiper-slide1 nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#top"
-              role="tab"
-              aria-controls="top"
-              aria-selected="false"
+              className={`nav-link ${activeTab === "top" ? "active" : ""}`}
+              onClick={() => setActiveTab("top")}
             >
               Top
             </div>
-            <div
-              className="swiper-slide1 nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#popular"
-              role="tab"
-              aria-controls="popular"
-              aria-selected="false"
-            >
-              Popular
-            </div>
-            <div
-              className="swiper-slide1 nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#price"
-              role="tab"
-              aria-controls="price"
-              aria-selected="false"
-            >
-              Token price
-            </div>
-            <div
-              className="swiper-slide1 nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#new"
-              role="tab"
-              aria-controls="new"
-              aria-selected="false"
-            >
-              New token
-            </div>
           </div>
-          {/* </div> */}
         </div>
+
         <div className="tab-content mt-8">
-          <div
-            className="tab-pane fade show active"
-            id="favorites"
-            role="tabpanel"
-          >
+          <div className="tab-pane fade show active" id="favorites">
             <div className="d-flex justify-content-between">
               Name
               <p className="d-flex gap-8">
@@ -156,195 +103,56 @@ export default function Rating() {
                 <span>Change</span>
               </p>
             </div>
+
             <ul className="mt-16">
-              {coins.map((coin, index) => (
-                <li key={index} className="mt-16">
-                  <a
-                    href={`/coin/${coin.title}`}
-                    className="coin-item style-2 gap-12"
-                  >
-                    <Image
-                      alt="img"
-                      className="img"
-                      src={coin.imgSrc}
-                      width={coin.imgWidth}
-                      height={coin.imgHeight}
-                    />
-                    <div className="content">
-                      <div className="title">
-                        <p className="mb-4 text-button">{coin.title}</p>
-                        <span className="text-secondary">{coin.marketCap}</span>
+              {filteredCoins.map((coin) => {
+                const coinName = Object.keys(coin.unique_id)[0];
+                const coinData = coin.unique_id[coinName];
+                const coinlink = coin.link;
+                const price = coinData ? `$${coinData.usd.toLocaleString()}` : "N/A";
+                const change =
+                  coinData && coinData.usd_24h_change
+                    ? `${coinData.usd_24h_change.toFixed(2)}%`
+                    : "N/A";
+                const changeClass =
+                  coinData && coinData.usd_24h_change >= 0
+                    ? "increase"
+                    : "decrease";
+
+                return (
+                  <li key={coin.id} className="mt-16">
+                    <Link
+                      href={`/coin/${coinName}`}
+                      className="coin-item style-2 gap-12"
+                    >
+
+                      <Image
+                        alt="coin"
+                        className="img"
+                        src={coin.icon}
+                        width={64}
+                        height={64}
+                      />
+                      <div className="content">
+                        <div className="title">
+                          <p className="mb-4 text-button">{coinName}</p>
+                          <span className="text-secondary">{coin.market_cap}</span>
+                        </div>
+                        <div className="d-flex align-items-center gap-12">
+                          <span className="text-small">{price}</span>
+                          <span className={`coin-btn ${changeClass}`}>
+                            {change}
+                          </span>
+                        </div>
                       </div>
-                      <div className="d-flex align-items-center gap-12">
-                        <span className="text-small">{coin.price}</span>
-                        <span className={`coin-btn ${coin.changeClass}`}>
-                          {coin.change}
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="tab-pane fade" id="top" role="tabpanel">
-            <div className="d-flex justify-content-between">
-              Name
-              <p className="d-flex gap-8">
-                <span>Last price</span>
-                <span>Change</span>
-              </p>
-            </div>
-            <ul className="mt-16">
-              {coins.map((coin, index) => (
-                <li key={index} className="mt-16">
-                  <Link
-                    href={`/choose-payment`}
-                    className="coin-item style-2 gap-12"
-                  >
-                    <Image
-                      alt="img"
-                      className="img"
-                      src={coin.imgSrc}
-                      width={coin.imgWidth}
-                      height={coin.imgHeight}
-                    />
-                    <div className="content">
-                      <div className="title">
-                        <p className="mb-4 text-button">{coin.title}</p>
-                        <span className="text-secondary">{coin.marketCap}</span>
-                      </div>
-                      <div className="d-flex align-items-center gap-12">
-                        <span className="text-small">{coin.price}</span>
-                        <span className={`coin-btn ${coin.changeClass}`}>
-                          {coin.change}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="tab-pane fade" id="popular" role="tabpanel">
-            <div className="d-flex justify-content-between">
-              Name
-              <p className="d-flex gap-8">
-                <span>Last price</span>
-                <span>Change</span>
-              </p>
-            </div>
-            <ul className="mt-16">
-              {coins.map((coin, index) => (
-                <li key={index} className="mt-16">
-                  <Link
-                    href={`/choose-payment`}
-                    className="coin-item style-2 gap-12"
-                  >
-                    <Image
-                      alt="img"
-                      className="img"
-                      src={coin.imgSrc}
-                      width={coin.imgWidth}
-                      height={coin.imgHeight}
-                    />
-                    <div className="content">
-                      <div className="title">
-                        <p className="mb-4 text-button">{coin.title}</p>
-                        <span className="text-secondary">{coin.marketCap}</span>
-                      </div>
-                      <div className="d-flex align-items-center gap-12">
-                        <span className="text-small">{coin.price}</span>
-                        <span className={`coin-btn ${coin.changeClass}`}>
-                          {coin.change}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="tab-pane fade" id="price" role="tabpanel">
-            <div className="d-flex justify-content-between">
-              Name
-              <p className="d-flex gap-8">
-                <span>Last price</span>
-                <span>Change</span>
-              </p>
-            </div>
-            <ul className="mt-16">
-              {coins.map((coin, index) => (
-                <li key={index} className="mt-16">
-                  <Link
-                    href={`/choose-payment`}
-                    className="coin-item style-2 gap-12"
-                  >
-                    <Image
-                      alt="img"
-                      className="img"
-                      src={coin.imgSrc}
-                      width={coin.imgWidth}
-                      height={coin.imgHeight}
-                    />
-                    <div className="content">
-                      <div className="title">
-                        <p className="mb-4 text-button">{coin.title}</p>
-                        <span className="text-secondary">{coin.marketCap}</span>
-                      </div>
-                      <div className="d-flex align-items-center gap-12">
-                        <span className="text-small">{coin.price}</span>
-                        <span className={`coin-btn ${coin.changeClass}`}>
-                          {coin.change}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="tab-pane fade" id="new" role="tabpanel">
-            <div className="d-flex justify-content-between">
-              Name
-              <p className="d-flex gap-8">
-                <span>Last price</span>
-                <span>Change</span>
-              </p>
-            </div>
-            <ul className="mt-16">
-              {coins.map((coin, index) => (
-                <li key={index} className="mt-16">
-                  <Link
-                    href={`/choose-payment`}
-                    className="coin-item style-2 gap-12"
-                  >
-                    <Image
-                      alt="img"
-                      className="img"
-                      src={coin.imgSrc}
-                      width={coin.imgWidth}
-                      height={coin.imgHeight}
-                    />
-                    <div className="content">
-                      <div className="title">
-                        <p className="mb-4 text-button">{coin.title}</p>
-                        <span className="text-secondary">{coin.marketCap}</span>
-                      </div>
-                      <div className="d-flex align-items-center gap-12">
-                        <span className="text-small">{coin.price}</span>
-                        <span className={`coin-btn ${coin.changeClass}`}>
-                          {coin.change}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              ))}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

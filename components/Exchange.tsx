@@ -1,19 +1,53 @@
 "use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import React, { useState } from "react";
 import Image from "next/image";
-import { coins3, coins4 } from "@/data/coinItems";
-interface Coin {
-  imageAlt: string;
-  imageSrc: string;
+import axios, { AxiosError } from "axios";
+import { coins4 } from "@/data/coinItems";
+
+interface Wallet {
+  id: number;
   name: string;
-  value: string;
-  price: string;
-  changeClass: string;
-  change: string;
+  is_active: number;
+  unique_id: {
+    [coinName: string]: {
+      usd: number;
+      usd_24h_change: number;
+    } | null;
+  };
+  icon: string;
+  link: string;
+  market_cap: string;
 }
-const Exchange = () => {
-  const [selectedCoin, setSelectedCoin] = useState(coins4[0]);
+
+export default function Rating() {
+  const [coins, setCoins] = useState<Wallet[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCoin, setSelectedCoin] = useState<typeof coins4[0] | null>(null);
+
+  useEffect(() => {
+    const fetchWallets = async () => {
+      try {
+        const res = await axios.get("http://localhost:1000/api/wallet/get_wallets"); // Adjust URL if needed
+        if (res.data.status_code) {
+          setCoins(res.data.data);
+        }
+      } catch (err) {
+        const error = err as AxiosError<{ msg: string }>;
+        alert(error.response?.data?.msg || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWallets();
+  }, []);
+
+  if (loading) {
+    return <div className="text-center p-4">Loading...</div>;
+  }
+
   return (
     <>
       <div className="header-style2 fixed-top d-flex align-items-center justify-content-between bg-surface">
@@ -29,6 +63,7 @@ const Exchange = () => {
           data-bs-target="#filter"
         />
       </div>
+
       <div className="pt-55 pb-80">
         <div className="tf-container">
           <div className="mt-4 search-box box-input-field">
@@ -41,12 +76,13 @@ const Exchange = () => {
             />
             <i className="icon-close" />
           </div>
+
           <div className="mt-20">
             <div className="line-bt">
               <div
                 className="swiper swiper-wrapper-r market-swiper"
                 data-space-between={20}
-                style={{ maxWidth: "100vw", overflow: "scroll" }}
+                style={{ maxWidth: "100vw", overflowX: "auto" }}
                 data-preview="auto"
               >
                 <div className="swiper-wrapper menu-tab-v3" role="tablist">
@@ -66,7 +102,7 @@ const Exchange = () => {
                     data-bs-target="#favorites"
                     role="tab"
                     aria-controls="favorites"
-                    aria-selected="false"
+                    aria-selected="true"
                   >
                     <i className="icon-star" />
                     Favorites
@@ -104,210 +140,68 @@ const Exchange = () => {
                 </div>
               </div>
             </div>
-            <div className="tab-content mt-8 mb-16">
-              <div
-                className="tab-pane fade show active"
-                id="all"
-                role="tabpanel"
-              >
+
+            <div className="tab-content mt-8">
+              <div className="tab-pane fade show active" id="favorites">
                 <div className="d-flex justify-content-between">
-                  Name/Revenue
+                  Name
                   <p className="d-flex gap-8">
                     <span>Last price</span>
-                    <span>24h change</span>
+                    <span>Change</span>
                   </p>
                 </div>
+
                 <ul className="mt-16">
-                  {coins3.map((coin: Coin, index: number) => (
-                    <li key={index} className="mt-16">
-                      <Link
-                        href={`/choose-payment`}
-                        className="coin-item style-2 gap-12"
-                      >
-                        <Image
-                          alt={coin.imageAlt}
-                          className="img"
-                          src={coin.imageSrc}
-                          width={64}
-                          height={65}
-                        />
-                        <div className="content">
-                          <div className="title">
-                            <p className="mb-4 text-button">{coin.name}</p>
-                            <span className="text-secondary">{coin.value}</span>
+                  {coins.map((coin) => {
+                    const coinName = Object.keys(coin.unique_id)[0];
+                    const coinData = coin.unique_id[coinName];
+                    const coinlink = coin.link;
+                    const price = coinData ? `$${coinData.usd.toLocaleString()}` : "N/A";
+                    const change =
+                      coinData && coinData.usd_24h_change != null
+                        ? `${coinData.usd_24h_change.toFixed(2)}%`
+                        : "N/A";
+                    const changeClass =
+                      coinData && coinData.usd_24h_change >= 0
+                        ? "increase"
+                        : "decrease";
+
+                    return (
+                      <li key={coin.id} className="mt-16">
+                        <Link
+                          href={`/choose-payment?symbol=${encodeURIComponent(
+                            coinlink
+                          )}&name=${encodeURIComponent(coinName)}`}
+                          className="coin-item style-2 gap-12"
+                        >
+                          <Image
+                            alt="coin"
+                            className="img"
+                            src={coin.icon}
+                            width={64}
+                            height={64}
+                          />
+                          <div className="content">
+                            <div className="title">
+                              <p className="mb-4 text-button">{coinName}</p>
+                              <span className="text-secondary">{coin.market_cap}</span>
+                            </div>
+                            <div className="d-flex align-items-center gap-12">
+                              <span className="text-small">{price}</span>
+                              <span className={`coin-btn ${changeClass}`}>{change}</span>
+                            </div>
                           </div>
-                          <div className="d-flex align-items-center gap-12">
-                            <span className="text-small">{coin.price}</span>
-                            <span className={`coin-btn ${coin.changeClass}`}>
-                              {coin.change}
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="tab-pane fade" id="favorites" role="tabpanel">
-                <div className="d-flex justify-content-between">
-                  Name/Revenue
-                  <p className="d-flex gap-8">
-                    <span>Last price</span>
-                    <span>24h change</span>
-                  </p>
-                </div>
-                <ul className="mt-16">
-                  {coins3.map((coin: Coin, index: number) => (
-                    <li key={index} className="mt-16">
-                      <Link
-                        href={`/choose-payment`}
-                        className="coin-item style-2 gap-12"
-                      >
-                        <Image
-                          alt={coin.imageAlt}
-                          className="img"
-                          src={coin.imageSrc}
-                          width={64}
-                          height={65}
-                        />
-                        <div className="content">
-                          <div className="title">
-                            <p className="mb-4 text-button">{coin.name}</p>
-                            <span className="text-secondary">{coin.value}</span>
-                          </div>
-                          <div className="d-flex align-items-center gap-12">
-                            <span className="text-small">{coin.price}</span>
-                            <span className={`coin-btn ${coin.changeClass}`}>
-                              {coin.change}
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="tab-pane fade" id="attractive" role="tabpanel">
-                <div className="d-flex justify-content-between">
-                  Name/Revenue
-                  <p className="d-flex gap-8">
-                    <span>Last price</span>
-                    <span>24h change</span>
-                  </p>
-                </div>
-                <ul className="mt-16">
-                  {coins3.map((coin: Coin, index: number) => (
-                    <li key={index} className="mt-16">
-                      <Link
-                        href={`/choose-payment`}
-                        className="coin-item style-2 gap-12"
-                      >
-                        <Image
-                          alt={coin.imageAlt}
-                          className="img"
-                          src={coin.imageSrc}
-                          width={64}
-                          height={65}
-                        />
-                        <div className="content">
-                          <div className="title">
-                            <p className="mb-4 text-button">{coin.name}</p>
-                            <span className="text-secondary">{coin.value}</span>
-                          </div>
-                          <div className="d-flex align-items-center gap-12">
-                            <span className="text-small">{coin.price}</span>
-                            <span className={`coin-btn ${coin.changeClass}`}>
-                              {coin.change}
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="tab-pane fade" id="meme" role="tabpanel">
-                <div className="d-flex justify-content-between">
-                  Name/Revenue
-                  <p className="d-flex gap-8">
-                    <span>Last price</span>
-                    <span>24h change</span>
-                  </p>
-                </div>
-                <ul className="mt-16">
-                  {coins3.map((coin: Coin, index: number) => (
-                    <li key={index} className="mt-16">
-                      <Link
-                        href={`/choose-payment`}
-                        className="coin-item style-2 gap-12"
-                      >
-                        <Image
-                          alt={coin.imageAlt}
-                          className="img"
-                          src={coin.imageSrc}
-                          width={64}
-                          height={65}
-                        />
-                        <div className="content">
-                          <div className="title">
-                            <p className="mb-4 text-button">{coin.name}</p>
-                            <span className="text-secondary">{coin.value}</span>
-                          </div>
-                          <div className="d-flex align-items-center gap-12">
-                            <span className="text-small">{coin.price}</span>
-                            <span className={`coin-btn ${coin.changeClass}`}>
-                              {coin.change}
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="tab-pane fade" id="staking" role="tabpanel">
-                <div className="d-flex justify-content-between">
-                  Name/Revenue
-                  <p className="d-flex gap-8">
-                    <span>Last price</span>
-                    <span>24h change</span>
-                  </p>
-                </div>
-                <ul className="mt-16">
-                  {coins3.map((coin: Coin, index: number) => (
-                    <li key={index} className="mt-16">
-                      <Link
-                        href={`/choose-payment`}
-                        className="coin-item style-2 gap-12"
-                      >
-                        <Image
-                          alt={coin.imageAlt}
-                          className="img"
-                          src={coin.imageSrc}
-                          width={64}
-                          height={65}
-                        />
-                        <div className="content">
-                          <div className="title">
-                            <p className="mb-4 text-button">{coin.name}</p>
-                            <span className="text-secondary">{coin.value}</span>
-                          </div>
-                          <div className="d-flex align-items-center gap-12">
-                            <span className="text-small">{coin.price}</span>
-                            <span className={`coin-btn ${coin.changeClass}`}>
-                              {coin.change}
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div className="modal fade action-sheet" id="filter">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -324,7 +218,7 @@ const Exchange = () => {
                 >
                   <div
                     className={`item-check coin-item style-2 gap-8  ${
-                      selectedCoin == coin ? "active" : ""
+                      selectedCoin === coin ? "active" : ""
                     }`}
                   >
                     <Image
@@ -347,6 +241,4 @@ const Exchange = () => {
       </div>
     </>
   );
-};
-
-export default Exchange;
+}

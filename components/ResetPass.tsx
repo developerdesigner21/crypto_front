@@ -1,7 +1,39 @@
 "use client";
 import Image from "next/image";
 import GoBackButton from "./BackButton";
+import { useState } from "react";
+import axios from "axios";
+
 export default function ResetPass() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email) {
+      alert("Please enter your email.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post("http://localhost:1000/api/auth/forget_password", { email });
+
+      console.log("✅ API response:", response.data);
+
+      if (response.data.status_code) {
+        alert("✅ Reset link sent to your email.");
+      } else {
+        alert("❌ " + response.data.msg);
+      }
+    } catch (err) {
+      alert("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="header fixed-top bg-surface d-flex justify-content-center align-items-center">
@@ -85,15 +117,24 @@ export default function ResetPass() {
               Free Stock
             </a>
           </div>
-          <form onSubmit={(e) => e.preventDefault()} className="mt-60 mb-16">
+
+          <form onSubmit={handleSubmit} className="mt-60 mb-16">
             <h2 className="mt-60 text-center">Reset Password</h2>
             <fieldset className="mt-40">
               <label className="label-ip">
-                <p className="mb-8 text-small">Email/PhoneNumber</p>
-                <input type="text" defaultValue="themesflat@gmail.com" />
+                <p className="mb-8 text-small">Email</p>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                />
               </label>
             </fieldset>
-            <button className="mt-40">Next</button>
+
+            <button className="mt-40" type="submit" disabled={loading}>
+              {loading ? "Sending..." : "Next"}
+            </button>
           </form>
         </div>
       </div>

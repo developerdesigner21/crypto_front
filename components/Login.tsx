@@ -4,8 +4,54 @@ import Link from "next/link";
 import GoBackButton from "./BackButton";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import axios, { AxiosError } from "axios";
+
+
+
 export default function Login() {
+
   const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [showPass, setShowPass] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/home");
+    }
+  }, [router]);
+
+  const handleLogin = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("http://localhost:1000/api/auth/login_with_password", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      console.log("✅ API Response:", response.data);
+
+      if (response.data.status_code) {
+        alert("✅ Login successful!");
+
+        // ✅ Save token if needed
+        localStorage.setItem("token", response.data.token);
+
+        // ✅ Redirect to home
+        router.push("/home");
+      } else {
+        alert(response.data.msg || "Login failed");
+      }
+    } catch (err) {
+      const error = err as AxiosError<{ msg: string }>;
+      alert(error.response?.data?.msg || "Something went wrong");
+    }
+  };
 
   return (
     <>
@@ -20,18 +66,7 @@ export default function Login() {
             <h2 className="text-center">Login Cointex</h2>
             <ul className="mt-40 socials-login">
               <li className="mt-12">
-                <Link href={`/home`} className="tf-btn md social dark">
-                  <Image
-                    alt="img"
-                    src="/images/logo/fb.jpg"
-                    width={31}
-                    height={31}
-                  />
-                  Continue with Facebook
-                </Link>
-              </li>
-              <li className="mt-12">
-                <Link href={`/home`} className="tf-btn md social dark">
+                <Link href="http://localhost:1000/api/auth/google" className="tf-btn md social dark">
                   <Image
                     alt="img"
                     src="/images/logo/google.jpg"
@@ -41,56 +76,63 @@ export default function Login() {
                   Continue with Google
                 </Link>
               </li>
-              <li className="mt-12">
-                <Link href={`/home`} className="tf-btn md social dark">
-                  <Image
-                    alt="img"
-                    src="/images/logo/apple.jpg"
-                    width={21}
-                    height={20}
-                  />
-                  Continue with Apple
-                </Link>
-              </li>
+              
             </ul>
           </div>
+
           <div className="auth-line mt-12">Or</div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              router.push("/home");
-            }}
-            className="mt-16"
-          >
+
+          <form onSubmit={handleLogin} className="mt-16">
             <fieldset className="mt-16">
               <label className="label-ip">
                 <p className="mb-8 text-small">Email</p>
-                <input type="email" placeholder="Example@gmail" />
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  placeholder="Example@gmail.com"
+                />
               </label>
             </fieldset>
+
             <fieldset className="mt-16 mb-12">
               <label className="label-ip">
-                <p className="mb-8 text-small">Password</p>
+                <p className="mb-8 text-small">password</p>
                 <div className="box-auth-pass">
                   <input
-                    type="password"
+                    type={showPass ? "text" : "password"}
                     required
                     placeholder="Your password"
                     className="password-field"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                   />
-                  <span className="show-pass">
+                  <span
+                    className="show-pass"
+                    onClick={() => setShowPass((prev) => !prev)}
+                  >
                     <i className="icon-view" />
                     <i className="icon-view-hide" />
                   </span>
                 </div>
               </label>
             </fieldset>
+
             <Link href={`/reset-pass`} className="text-secondary">
               Forgot Password?
             </Link>
-            <button className="mt-20">Login</button>
+
+            <button type="submit" className="mt-20">
+              Login
+            </button>
+
             <p className="mt-20 text-center text-small">
-              Already have a Account?  <Link href={`/register`}>Sign up</Link>
+              Don't have an account? <Link href={`/register`}>Sign up</Link>
             </p>
           </form>
         </div>

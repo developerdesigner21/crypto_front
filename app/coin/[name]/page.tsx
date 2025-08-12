@@ -1,19 +1,50 @@
+'use client'
 import Link from 'next/link';
 import '../../../app/globals.css';
+import { useEffect, useState } from 'react';
+import { link } from 'fs';
 
 interface CoinPageProps {
-  params: { name: string };
+  params: { unique_id: string;
+    link: string;
+  };
+
 }
 
 export default function CoinPage({ params }: CoinPageProps) {
-  const coinName = params.name.toUpperCase();
+  const coinName = params.unique_id;
+  const link = params.link;
+  const [price, setPrice] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPrice() {
+      try {
+        const res = await fetch(
+          `https://api.coingecko.com/api/v3/simple/price?ids=${coinName}&vs_currencies=usd`
+        );
+        const data = await res.json();
+        if (data[coinName]?.usd) {
+          setPrice(data[coinName].usd);
+        }
+      } catch (error) {
+        console.error("Error fetching price:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPrice();
+  }, [coinName]);
+
+  console.log("coin:::", coinName);
   return (
     <div className='flex flex-col items-center justify-center min-h-screen text-center pt-40 w-full tf-container'>
       <h1 className='mb-3' style={{ color: 'lime', fontSize: '48px' }}>
-        25.00$
+        {coinName}
       </h1>
       <p style={{ color: 'white', fontSize: '20px', marginBottom: '20px' }}>
-        Live {coinName} Price
+        Live {coinName} Price:{" "}
+        {loading ? "Loading..." : price !== null ? `$${price}` : "N/A"}
       </p>
       <div className='w-full flex items-center justify-center'>
         <div
@@ -26,7 +57,7 @@ export default function CoinPage({ params }: CoinPageProps) {
           }}
         >
           <iframe
-            src="https://s.tradingview.com/widgetembed/?symbol=COINBASE%3ABTCUSD&interval=60&theme=dark"
+            src={link}
             width="100%"
             height="400"
             style={{
@@ -34,7 +65,7 @@ export default function CoinPage({ params }: CoinPageProps) {
               borderRadius: '8px',
               display: 'block'
             }}
-            title="Bitcoin Price Chart"
+            title={`${coinName} Price Chart`}
           />
         </div>
       </div>
