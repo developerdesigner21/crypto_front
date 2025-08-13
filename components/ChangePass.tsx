@@ -18,17 +18,17 @@ export default function ChangePass() {
     e.preventDefault();
 
     if (!token) {
-      alert("Token is missing from the URL.");
+  // alert("Token is missing from the URL.");
       return;
     }
 
     if (!newPassword || !confirmPassword) {
-      alert("Please enter both password fields.");
+  // alert("Please enter both password fields.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      alert("Passwords do not match.");
+  // alert("Passwords do not match.");
       return;
     }
 
@@ -40,13 +40,13 @@ export default function ChangePass() {
       );
 
       if (response.data.status_code) {
-        alert("✅ Password reset successful. Please log in.");
+  // alert("✅ Password reset successful. Please log in.");
         router.push("/log-in");
       } else {
-        alert("❌ " + response.data.msg);
+  // alert("❌ " + response.data.msg);
       }
     } catch (err: any) {
-      alert(err.response?.data?.msg || "Something went wrong.");
+  // alert(err.response?.data?.msg || "Something went wrong.");
     } finally {
       setLoading(false);
     }

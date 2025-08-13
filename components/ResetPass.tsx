@@ -12,7 +12,7 @@ export default function ResetPass() {
     e.preventDefault();
 
     if (!email) {
-      alert("Please enter your email.");
+  // alert("Please enter your email.");
       return;
     }
 
@@ -23,12 +23,12 @@ export default function ResetPass() {
       console.log("✅ API response:", response.data);
 
       if (response.data.status_code) {
-        alert("✅ Reset link sent to your email.");
+  // alert("✅ Reset link sent to your email.");
       } else {
-        alert("❌ " + response.data.msg);
+  // alert("❌ " + response.data.msg);
       }
     } catch (err) {
-      alert("Something went wrong.");
+  // alert("Something went wrong.");
     } finally {
       setLoading(false);
     }

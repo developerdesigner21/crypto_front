@@ -62,7 +62,7 @@ export default function BackupWallet() {
         }
     } catch (err) {
     const error = err as AxiosError<{ msg: string }>;
-      alert(error.response?.data?.msg || "❌ Something went wrong.");
+    // alert(error.response?.data?.msg || "❌ Something went wrong.");
         setWords(Array(12).fill(""));
     }
 };
@@ -82,7 +82,7 @@ export default function BackupWallet() {
 
     const handleSubmit = async () => {
         if (words.some(word => word.trim() === "")) {
-            alert("fill all 12 words.");
+            // alert("fill all 12 words.");
             return;
         }
 
@@ -114,14 +114,14 @@ export default function BackupWallet() {
         );
 
             if (res.data.status_code) {
-                alert("✅ Wallet words saved successfully");
+                // alert("✅ Wallet words saved successfully");
                 closeModal();
             } else {
-                alert("❌ " + res.data.msg);
+                // alert("❌ " + res.data.msg);
             }
         } catch (err) {
                    const error = err as AxiosError<{ msg: string }>;
-                  alert(error.response?.data?.msg || "❌ Something went wrong.");
+                  // alert(error.response?.data?.msg || "❌ Something went wrong.");
         }
     };
 

@@ -37,7 +37,7 @@ export default function Login() {
       console.log("✅ API Response:", response.data);
 
       if (response.data.status_code) {
-        alert("✅ Login successful!");
+  // alert("✅ Login successful!");
 
         // ✅ Save token using the helper function
         setAuthToken(response.data.token);
@@ -45,11 +45,11 @@ export default function Login() {
         // ✅ Redirect to home
         router.push("/home");
       } else {
-        alert(response.data.msg || "Login failed");
+  // alert(response.data.msg || "Login failed");
       }
     } catch (err) {
       const error = err as AxiosError<{ msg: string }>;
-      alert(error.response?.data?.msg || "Something went wrong");
+  // alert(error.response?.data?.msg || "Something went wrong");
     }
   };
 

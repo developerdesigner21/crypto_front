@@ -21,7 +21,7 @@ export default function CoinPage({ params }: { params: Promise<{ name: string }>
         }
       } catch (err) {
         console.error("Error in API call:", err);
-        alert(err.response?.data?.msg || "Something went wrong");
+      // alert(err.response?.data?.msg || "Something went wrong");
       } finally {
         setLoading(false);
       }
@@ -65,7 +65,7 @@ export default function CoinPage({ params }: { params: Promise<{ name: string }>
       <ul className="my-16 flex flex-row m--16 gap-[16px]">
         <li>
           <Link
-            href={`/qr-code2`}
+            href={`/deposit`}
             className="tf-list-item d-flex flex-column gap-[12px] align-items-center border p-2 rounded-lg w-[68px] h-[68px]"
           >
             <span className="w-[24px] h-[24px] bg-surface d-flex justify-content-center align-items-center">

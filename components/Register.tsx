@@ -26,7 +26,7 @@ export default function Register() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+  // alert("Passwords do not match");
       return;
     }
 
@@ -42,14 +42,14 @@ export default function Register() {
       console.log("Response",response.data);
 
       if (response.data.status) {
-        alert("✅ Registration successful!");
+  // alert("✅ Registration successful!");
         router.push("/log-in");
       } else {
-        alert(response.data.msg || "❌ Registration failed.");
+  // alert(response.data.msg || "❌ Registration failed.");
       }
     } catch (err) {
        const error = err as AxiosError<{ msg: string }>;
-      alert(error.response?.data?.msg || "❌ Something went wrong.");
+  // alert(error.response?.data?.msg || "❌ Something went wrong.");
     }
   };
 

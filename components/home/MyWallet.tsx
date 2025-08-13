@@ -24,7 +24,7 @@ export default function MyWallet() {
         }
       } catch (err) {
         console.error("Error in API call:", err);
-        alert(err.response?.data?.msg || "Something went wrong");
+  // alert(err.response?.data?.msg || "Something went wrong");
       }
     };
     fetchWallets();
@@ -128,7 +128,7 @@ export default function MyWallet() {
             </li>
             {/* <li>
               <Link
-                href={`/qr-code2`}
+                href={`/deposit`}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">

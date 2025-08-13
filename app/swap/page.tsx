@@ -36,7 +36,7 @@ export default function SwapForm() {
       }
     } catch (err) {
       const error = err as AxiosError<{ msg: string }>;
-      alert(error.response?.data?.msg || "Something went wrong");
+  // alert(error.response?.data?.msg || "Something went wrong");
     }
   };
   fetchCoins();
@@ -44,7 +44,7 @@ export default function SwapForm() {
 
   // Handle swap
   const handleSwap = async () => {
-    if (!fromCoin || !toCoin || !amount) return alert("Please fill all fields");
+  if (!fromCoin || !toCoin || !amount) return; // alert("Please fill all fields");
     setLoading(true);
     setSwapResult(null);
     try {
@@ -56,11 +56,11 @@ export default function SwapForm() {
       if (data?.status_code) {
         setSwapResult(data.swap);
       } else {
-        alert(data?.msg || "Swap failed");
+  // alert(data?.msg || "Swap failed");
       }
     } catch (err) {
       const error = err as AxiosError<{ msg: string }>;
-        alert(error.response?.data?.msg || "Something went wrong");
+  // alert(error.response?.data?.msg || "Something went wrong");
     } finally {
       setLoading(false);
     }

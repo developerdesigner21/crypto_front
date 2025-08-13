@@ -43,7 +43,7 @@ export default function Market() {
         }
       } catch (err) {
         const error = err as AxiosError<{ msg: string }>;
-        alert(error.response?.data?.msg || "Something went wrong");
+  // alert(error.response?.data?.msg || "Something went wrong");
       } finally {
         setLoading(false);
       }
