@@ -90,7 +90,7 @@ export default function MyWallet() {
             <span className="text-primary">My Wallet</span>
           </h5>
           <h1 className="mt-16">
-            <a href="#">${coins?.total_value?.toFixed(2)}</a>
+            <a href="#">${(coins?.total_value ?? 0)?.toFixed(2)}</a>
           </h1>
           <ul className="mt-16 grid-4 m--16">
             <li>
