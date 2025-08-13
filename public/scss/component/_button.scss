@@ -54,7 +54,19 @@
             border-color: var(--primary);
         }
     }
-   
+    &:disabled,
+    &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+        background-color: var(--line);
+        color: var(--white);
+        border: 0; 
+        &:hover {
+            background-color: var(--line);
+            color: var(--white);
+        }
+    }
 }
 .tag-xs {
     padding: 4px 8px;

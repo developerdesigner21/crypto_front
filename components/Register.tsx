@@ -43,7 +43,7 @@ export default function Register() {
 
       if (response.data.status) {
         alert("✅ Registration successful!");
-        router.push("/Login");
+        router.push("/log-in");
       } else {
         alert(response.data.msg || "❌ Registration failed.");
       }

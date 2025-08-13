@@ -22,28 +22,19 @@ interface Wallet {
   market_cap: string;
 }
 
-export default function Rating() {
-  const [coins, setCoins] = useState<Wallet[]>([]);
+type RatingProps = {
+  coins: any[];
+};
+
+export default function Rating({coins}:RatingProps) {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"all" | "favorite" | "top">("all");
 
   useEffect(() => {
-    const fetchWallets = async () => {
-      try {
-        const res = await apiClient.get('/api/wallet/get_wallets');
-        if (res.data.status_code) {
-          setCoins(res.data.data);
-        }
-      } catch (err) {
-        const error = err as AxiosError<{ msg: string }>;
-        alert(error.response?.data?.msg || "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWallets();
-  }, []);
+    if (coins.length > 0) {
+      setLoading(false);
+    }
+  }, [coins]);
 
   const filteredCoins = coins.filter((coin: any) => {
     if (activeTab === "favorite") {
@@ -136,6 +127,7 @@ export default function Rating() {
             <ul className="mt-16">
               {filteredCoins.map((coin) => {
                 const coinName = Object.keys(coin.unique_id)[0];
+                const coins = coin.name;
                 const coinData = coin.unique_id[coinName];
                 const coinlink = coin.link;
                 const price = coinData
@@ -153,7 +145,7 @@ export default function Rating() {
                 return (
                   <li key={coin.id} className="mt-16">
                     <Link
-                      href={`/coin/${coinName}`}
+                      href={`/coin/${coins}`}
                       className="coin-item style-2 gap-12"
                     >
                       <Image

@@ -1,9 +1,45 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notifications } from "@/data/notifications";
 
-export default function Header1() {
+type HeaderProps = {
+  coins: any[];
+};
+
+export default function Header1({ coins }: HeaderProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const [results, setResults] = useState<string[]>([]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(searchTerm);
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (!debouncedValue) {
+      setResults([]);
+      return;
+    }
+    const filtered = coins
+      .filter((coin) =>
+        Object.keys(coin.unique_id)[0]
+          .toLowerCase()
+          .includes(debouncedValue.toLowerCase())
+      )
+      .map((coin) => Object.keys(coin.unique_id)[0]);
+
+    setResults(filtered);
+  }, [debouncedValue]);
+
+  const handleClear = useCallback(() => {
+    setSearchTerm("");
+    setResults([]);
+  }, []);
+
   return (
     <>
       <div className="header-style2 fixed-top bg-menuDark">
@@ -18,19 +54,86 @@ export default function Header1() {
                 height={120}
               />
             </Link>
-            <div className="search-box box-input-field style-2">
+            <div className="search-box box-input-field style-2" style={{ position: "relative" }}>
               <a href={`/home-search`} className="icon-search" />
               <input
                 type="text"
                 placeholder="Looking for crypto"
                 required
                 className="clear-ip"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <i className="icon-close" />
+              {searchTerm && (
+                <i
+                  className="icon-close"
+                  style={{ cursor: "pointer" }}
+                  onClick={handleClear}
+                />
+              )}
+              {searchTerm && (
+                results.length > 0 ? (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      width: "100%",
+                      backgroundColor: "#1e1e1e",
+                      color: "#fff",
+                      border: "1px solid #333",
+                      borderRadius: "4px",
+                      marginTop: "4px",
+                      zIndex: 1000,
+                    }}
+                  >
+                    {results.map((item, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          padding: "10px",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          borderBottom:
+                            idx !== results.length - 1 ? "1px solid #333" : "none",
+                        }}
+                        onClick={() => {
+                          setSearchTerm(item);
+                          setResults([]);
+                        }}
+                      >
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      width: "100%",
+                      backgroundColor: "#1e1e1e",
+                      color: "#fff",
+                      border: "1px solid #333",
+                      borderRadius: "4px",
+                      marginTop: "4px",
+                      zIndex: 1000,
+                      height: '50px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: "14px",
+                    }}
+                  >
+                    No Result Found
+                  </div>
+                )
+              )}
             </div>
           </div>
           <div className="d-flex align-items-center gap-8">
-            <Link href={`/list-blog`} className="icon-gift" />
+            {/* <Link href={`/list-blog`} className="icon-gift" /> */}
             <a
               href="#notification"
               className="icon-noti box-noti"
@@ -55,28 +158,25 @@ export default function Header1() {
                     <li className={notification.additionalClasses} key={index}>
                       <a href="#" className="noti-item bg-menuDark">
                         <div
-                          className={`pb-8 line-bt ${
-                            notification.hasIcon ? "d-flex" : ""
-                          }`}
+                          className={`pb-8 ${notification.link ? "line-bt" : ""
+                            }`}
                         >
                           <p
-                            className={`text-button fw-6 ${
-                              notification.isSecondary ? "text-secondary" : ""
-                            }`}
+                            className={`text-button fw-6 ${notification.isSecondary ? "text-secondary" : ""
+                              }`}
                           >
                             {notification.content}
                           </p>
-                          {notification.hasIcon && (
-                            <i className="dot-lg bg-primary" />
-                          )}
                         </div>
-                        <span
-                          className={`d-block mt-8 ${
-                            notification.isSecondary ? "text-secondary" : ""
-                          }`}
-                        >
-                          {notification.time}
-                        </span>
+                        {notification.link && (
+                          <Link
+                            className="d-block mt-8"
+                            style={{ color: 'blue', textDecoration: 'underline' }}
+                            href={notification.link}
+                          >
+                            Click to Check
+                          </Link>
+                        )}
                       </a>
                     </li>
                   ))}

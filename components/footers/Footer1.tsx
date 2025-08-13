@@ -17,9 +17,9 @@ const navItems: NavItem[] = [
     label: "Home",
     className: "active",
   },
-  { href: "/exchange-market", iconClass: "icon-exchange", label: "Exchange" },
-  { href: "/earn", iconClass: "icon-earn", label: "Earn" },
-  { href: "/wallet", iconClass: "icon-wallet", label: "Wallet" },
+  { href: "/exchange-market", iconClass: "icon-exchange", label: "Assets" },
+  { href: "/deposit", iconClass: "icon-earn", label: "Deposit" },
+  { href: "/wallet", iconClass: "icon-history", label: "History" },
 ];
 
 export default function Footer1() {

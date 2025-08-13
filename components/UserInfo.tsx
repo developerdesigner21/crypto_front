@@ -1,8 +1,15 @@
+"use client"
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import GoBackButton from "./BackButton";
+import { useRouter } from "next/navigation";
 export default function UserInfo() {
+  const router = useRouter();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/log-in");
+  };
   return (
     <>
       <div className="header fixed-top bg-surface d-flex justify-content-center align-items-center">
@@ -15,11 +22,8 @@ export default function UserInfo() {
       </div>
       <div className="pt-45 pb-16">
         <div className="bg-menuDark tf-container">
-          <Link
-            href={`/profile`}
-            className="pt-12 pb-12 mt-4 d-flex justify-content-between align-items-center"
-          >
-            <div className="box-account">
+          <div className="pt-12 pb-12 mt-4 d-flex justify-content-between align-items-center">
+            <Link className="box-account" href={`/profile`}>
               <Image
                 alt="img"
                 className="avt"
@@ -34,11 +38,16 @@ export default function UserInfo() {
                 </p>
                 <span className="tag-xs style-2 round-2 red">Unverified</span>
               </div>
+            </Link>
+            <div style={{display: 'flex', alignItems:'center', gap:'20px'}}>
+              <button className='text-danger' style={{backgroundColor: 'transparent', border:'none', padding:0}} onClick={handleLogout}>
+                Logout
+              </button>
+              <Link className="arr-right" href={`/profile`}>
+                <i className="icon-arr-right" />
+              </Link>
             </div>
-            <span className="arr-right">
-              <i className="icon-arr-right" />
-            </span>
-          </Link>
+          </div>
         </div>
         <div className="bg-menuDark tf-container">
           <div className="pt-12 pb-12 mt-4">
@@ -179,7 +188,7 @@ export default function UserInfo() {
             </ul>
           </div>
         </div>
-        <div className="bg-menuDark tf-container">
+        {/* <div className="bg-menuDark tf-container">
           <a
             href="#"
             className="pt-12 pb-12 mt-4 d-flex justify-content-between align-items-center"
@@ -189,7 +198,7 @@ export default function UserInfo() {
               <i className="icon-arr-right" />
             </span>
           </a>
-        </div>
+        </div> */}
       </div>
       {/*cryptocurrency */}
       <div className="modal fade modalRight" id="cryptocurrency">

@@ -4,7 +4,7 @@
 .box-noti {
     position: relative;
     &::after {
-        content: "2";
+        content: "";
         font-family: variable.$font-main-family;
         position: absolute;
         top: 0;

@@ -1,7 +1,14 @@
+"use client"
 import React from "react";
 import Link from "next/link";
 import GoBackButton from "./BackButton";
+import { useRouter } from "next/navigation";
 export default function Profile() {
+  const router = useRouter();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/log-in");
+  };
   return (
     <>
       {/* preloade */}
@@ -145,6 +152,7 @@ export default function Profile() {
           </ul>
           <span
             className="text-button mt-32 d-inline-block text-red fw-6"
+            style={{ cursor: 'pointer' }}
             data-bs-toggle="modal"
             data-bs-target="#logout"
           >
@@ -170,12 +178,13 @@ export default function Profile() {
               >
                 Cancel
               </a>
-              <Link
-                href={`/log-in`}
-                className="text-center text-button fw-6 p-10 text-red"
+              <button 
+                className="text-center text-button fw-6 p-10 text-red" 
+                style={{backgroundColor:'transparent', border:'none'}}
+                onClick={handleLogout}
               >
                 Log Out
-              </Link>
+              </button>
             </div>
           </div>
         </div>

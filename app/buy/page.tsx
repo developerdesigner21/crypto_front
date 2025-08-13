@@ -20,7 +20,7 @@ const cryptoServices = [
 
 export default function BuyCryptoGrid() {
     return (
-        <div className="bg-[#11150f] text-white px-6 pt-8">
+        <div className="bg-[#11150f] text-white px-6 pt-8 tf-container">
             <h2 className="text-lg font-semibold mb-8">Buy Crypto</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[20px]">
                 {cryptoServices.map((service, i) => (
