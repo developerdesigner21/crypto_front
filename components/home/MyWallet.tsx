@@ -66,7 +66,7 @@ export default function MyWallet() {
             </li>
             <li>
               <Link
-                href={`/choose-payment`}
+                href={`/exchange-market`}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
@@ -88,13 +88,13 @@ export default function MyWallet() {
             </li>
             <li>
               <Link
-                href={`/buy`}
+                href={`/linkwallet`}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
-                  <i className="icon icon-exchange" />
+                  <MdBackup style={{ width: '32px', height: '32px' }} className="text-white" />
                 </span>
-                Earn
+                Backup
               </Link>
             </li>
           </ul>
@@ -112,13 +112,13 @@ export default function MyWallet() {
             </li>
             <li>
               <Link
-                href={`/linkwallet`}
+                href={`/buy`}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
-                  <MdBackup style={{ width: '32px', height: '32px' }} className="text-white" />
+                  <SiBitcoin style={{ width: '32px', height: '32px' }} className="text-white" />
                 </span>
-                Backup
+                Mining
               </Link>
             </li>
             <li>
@@ -127,9 +127,9 @@ export default function MyWallet() {
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
-                  <SiBitcoin style={{ width: '32px', height: '32px' }} className="text-white" />
+                  <i className="icon icon-exchange" />
                 </span>
-                Mining
+                Earn
               </Link>
             </li>
             <li>
