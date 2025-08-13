@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import apiClient from "@/lib/axios-config";
 import GoBackButton from "./BackButton";
+import { toast } from "react-toastify";
 
 export default function ChangePass() {
   const searchParams = useSearchParams();
@@ -19,16 +20,19 @@ export default function ChangePass() {
 
     if (!token) {
   // alert("Token is missing from the URL.");
+      toast.success('Token is missing from the URL.')
       return;
     }
 
     if (!newPassword || !confirmPassword) {
   // alert("Please enter both password fields.");
+      toast.success('Please enter both password fields.')
       return;
     }
 
     if (newPassword !== confirmPassword) {
   // alert("Passwords do not match.");
+      toast.success('Passwords do not match.')
       return;
     }
 
@@ -41,6 +45,7 @@ export default function ChangePass() {
 
       if (response.data.status_code) {
   // alert("✅ Password reset successful. Please log in.");
+      toast.success('Password reset successfully');
         router.push("/log-in");
       } else {
   // alert("❌ " + response.data.msg);

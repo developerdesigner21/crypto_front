@@ -5,6 +5,7 @@ import GoBackButton from "./BackButton"; // adjust this import path as needed
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import apiClient from "@/lib/axios-config";
+import { toast } from "react-toastify";
 
 
 export default function Register() {
@@ -27,6 +28,7 @@ export default function Register() {
 
     if (formData.password !== formData.confirmPassword) {
   // alert("Passwords do not match");
+      toast.success('Passwords do not match')
       return;
     }
 
@@ -43,6 +45,7 @@ export default function Register() {
 
       if (response.data.status) {
   // alert("✅ Registration successful!");
+        toast.success('Registration successful!')
         router.push("/log-in");
       } else {
   // alert(response.data.msg || "❌ Registration failed.");

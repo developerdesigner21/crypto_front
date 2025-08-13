@@ -6,6 +6,7 @@ import { MdBackup } from "react-icons/md";
 import { BiCandles } from "react-icons/bi";
 import { SiBitcoin } from "react-icons/si";
 import apiClient from "@/lib/axios-config";
+import { FaRobot } from "react-icons/fa";
 
 const accountOptions: string[] = ["Account 1", "Account 2"];
 export default function MyWallet() {
@@ -160,16 +161,16 @@ export default function MyWallet() {
               </Link>
             </li>
           </ul>
-          {/* <ul className="mt-16 grid-4 m--16">
+          <ul className="mt-16 grid-4 m--16">
             <li>
               <Link
                 href={`/swap`}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
-                  <AiOutlineSwap style={{ width: '32px', height: '32px' }} className="text-white" />
+                  <FaRobot style={{ width: '32px', height: '32px' }} className="text-white" />
                 </span>
-                Swap
+                Bot
               </Link>
             </li>
             <li>
@@ -180,7 +181,7 @@ export default function MyWallet() {
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
                   <SiBitcoin style={{ width: '32px', height: '32px' }} className="text-white" />
                 </span>
-                Mining
+                Stock
               </Link>
             </li>
             <li>
@@ -191,7 +192,7 @@ export default function MyWallet() {
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
                   <i className="icon icon-exchange" />
                 </span>
-                Earn
+                Mining
               </Link>
             </li>
             <li>
@@ -202,10 +203,10 @@ export default function MyWallet() {
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
                   <BiCandles style={{ width: '32px', height: '32px' }} className="text-white" />
                 </span>
-                Stock
+                Stacking
               </Link>
             </li>
-          </ul> */}
+          </ul>
         </div>
       </div>
       <>

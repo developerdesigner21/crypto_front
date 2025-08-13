@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { AxiosError } from "axios";
 import apiClient, { setAuthToken } from "@/lib/axios-config";
+import { toast } from "react-toastify";
 
 
 export default function Login() {
@@ -38,7 +39,7 @@ export default function Login() {
 
       if (response.data.status_code) {
   // alert("✅ Login successful!");
-
+        toast.success('Login successfully');
         // ✅ Save token using the helper function
         setAuthToken(response.data.token);
 

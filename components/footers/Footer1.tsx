@@ -20,6 +20,7 @@ const navItems: NavItem[] = [
   { href: "/exchange-market", iconClass: "icon-exchange", label: "Assets" },
   { href: "/deposit", iconClass: "icon-earn", label: "Deposit" },
   { href: "/wallet", iconClass: "icon-history", label: "History" },
+  { href: "/user-info", iconClass: "icon-user", label: "Profile" },
 ];
 
 export default function Footer1() {

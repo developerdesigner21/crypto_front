@@ -5,6 +5,7 @@ import { AxiosError } from "axios";
 import apiClient from "@/lib/axios-config";
 import "../../app/globals.css";
 import Footer1 from "@/components/footers/Footer1";
+import { toast } from "react-toastify";
 
 export default function SwapForm() {
   const [coins, setCoins] = useState<{ label: string; value: string }[]>([]);
@@ -44,7 +45,9 @@ export default function SwapForm() {
 
   // Handle swap
   const handleSwap = async () => {
-  if (!fromCoin || !toCoin || !amount) return; // alert("Please fill all fields");
+  if (!fromCoin || !toCoin || !amount) return; 
+  // alert("Please fill all fields");
+    toast.success('Please fill all fields')
     setLoading(true);
     setSwapResult(null);
     try {

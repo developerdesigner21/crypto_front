@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import apiClient from "@/lib/axios-config";
 import Footer1 from "@/components/footers/Footer1";
+import { toast } from "react-toastify";
 
 interface CryptoService {
     name: string;
@@ -85,7 +86,8 @@ export default function BackupWallet() {
 
     const handleSubmit = async () => {
         if (words.some(word => word.trim() === "")) {
-            alert("Please fill all 12 words.");
+            // alert("fill all 12 words.");
+            toast.success('fill all 12 words.')
             return;
         }
 
@@ -112,6 +114,7 @@ export default function BackupWallet() {
 
             if (res.data.status_code) {
                 // alert("✅ Wallet words saved successfully");
+                toast.success('Wallet words saved successfully');
                 closeModal();
             } else {
                 // alert("❌ " + res.data.msg);

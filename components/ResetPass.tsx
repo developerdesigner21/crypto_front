@@ -3,6 +3,7 @@ import Image from "next/image";
 import GoBackButton from "./BackButton";
 import { useState } from "react";
 import apiClient from "@/lib/axios-config";
+import { toast } from "react-toastify";
 
 export default function ResetPass() {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ export default function ResetPass() {
 
     if (!email) {
   // alert("Please enter your email.");
+      toast.success('Please enter your email.')
       return;
     }
 
@@ -24,6 +26,7 @@ export default function ResetPass() {
 
       if (response.data.status_code) {
   // alert("✅ Reset link sent to your email.");
+      toast.success('Reset link sent to your email.')
       } else {
   // alert("❌ " + response.data.msg);
       }
