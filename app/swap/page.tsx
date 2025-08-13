@@ -4,6 +4,7 @@ import { AiOutlineSwap } from "react-icons/ai";
 import { AxiosError } from "axios";
 import apiClient from "@/lib/axios-config";
 import "../../app/globals.css";
+import Footer1 from "@/components/footers/Footer1";
 
 export default function SwapForm() {
   const [coins, setCoins] = useState<{ label: string; value: string }[]>([]);
@@ -66,6 +67,7 @@ export default function SwapForm() {
   };
 
   return (
+    <>
     <div className="flex justify-center items-center min-h-screen bg-black">
       <div className="bg-[#111] p-6 rounded-2xl w-[420px] border border-gray-700">
 
@@ -137,5 +139,7 @@ export default function SwapForm() {
         </button>
       </div>
     </div>
+    <Footer1 />
+    </>
   );
 }

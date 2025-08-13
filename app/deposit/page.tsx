@@ -5,6 +5,7 @@ import '../../app/globals.css'
 import { useEffect, useState } from 'react';
 import apiClient from '@/lib/axios-config';
 import { useRouter } from 'next/navigation';
+import Footer1 from '@/components/footers/Footer1';
 
 interface Coin {
     id: string;
@@ -65,6 +66,7 @@ export default function DepositPage() {
     }, []);
 
     return (
+        <>
         <div className="flex items-center justify-center min-h-screen tf-container">
             <div className="border border-white rounded-lg p-6 w-full max-w-2xl bg-surface text-white">
                 <label className="block mb-2 text-sm font-semibold">Select Wallet</label>
@@ -110,5 +112,7 @@ export default function DepositPage() {
                 </button>
             </div>
         </div>
+        <Footer1 />
+        </>
     );
 }

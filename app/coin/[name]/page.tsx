@@ -4,6 +4,7 @@ import '../../../app/globals.css';
 import { useEffect, useState } from 'react';
 import apiClient from '@/lib/axios-config';
 import { use } from 'react';
+import Footer1 from '@/components/footers/Footer1';
 
 export default function CoinPage({ params }: { params: Promise<{ name: string }> }) {
   const { name } = use(params);
@@ -29,7 +30,8 @@ export default function CoinPage({ params }: { params: Promise<{ name: string }>
   }, []);
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen text-center pt-24 w-full tf-container'>
+    <>
+    <div className='flex flex-col items-center justify-center min-h-screen text-center py-24 w-full tf-container'>
       <h1 className='mb-3' style={{ color: 'lime', fontSize: '48px' }}>
         {coinName}
       </h1>
@@ -113,5 +115,7 @@ export default function CoinPage({ params }: { params: Promise<{ name: string }>
         </div>
       </div>
     </div>
+    <Footer1 />
+    </>
   );
 }

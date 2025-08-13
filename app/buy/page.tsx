@@ -7,6 +7,7 @@ import gemini from '../../assets/Gemini.png';
 import crypto from '../../assets/crypto.webp';
 import transak from '../../assets/transak.jpg';
 import '../../app/globals.css'
+import Footer1 from "@/components/footers/Footer1";
 
 const cryptoServices = [
     { name: "ByBit", desc: "Buy Bitcoin, Ethereum & more", logo: bybit, link:'https://www.bybitglobal.com/en/fiat/trade/express/home/buy/USDT/INR' },
@@ -20,6 +21,7 @@ const cryptoServices = [
 
 export default function BuyCryptoGrid() {
     return (
+        <>
         <div className="bg-[#11150f] text-white px-6 pt-8 tf-container">
             <h2 className="text-lg font-semibold mb-8">Buy Crypto</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[20px]">
@@ -46,5 +48,7 @@ export default function BuyCryptoGrid() {
                 ))}
             </div>
         </div>
+        <Footer1 />
+        </>
     );
 }

@@ -5,6 +5,7 @@ import '../../app/globals.css';
 import { useState } from "react";
 import axios,{AxiosError} from "axios";
 import apiClient from "@/lib/axios-config";
+import Footer1 from "@/components/footers/Footer1";
 
 
 const cryptoServices = [
@@ -125,6 +126,7 @@ export default function BackupWallet() {
     };
 
     return (
+        <>
         <div className="bg-[#11150f] text-white px-6 pt-8 tf-container">
             <h2 className="text-lg font-semibold mb-8">Backup Wallet</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[20px]">
@@ -188,5 +190,7 @@ export default function BackupWallet() {
                 </div>
             )}
         </div>
+        <Footer1/>
+        </>
     );
 }

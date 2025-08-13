@@ -80,7 +80,7 @@ export default function Wallet() {
               </a> */}
             </h5>
             <h1 className="mt-16">
-              <a href="#">${coins?.total_value}</a>
+              <a href="#">${coins?.total_value?.toFixed(2)}</a>
             </h1>
             <ul className="mt-16 grid-4 m--16">
               <li>

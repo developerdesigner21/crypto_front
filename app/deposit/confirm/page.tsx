@@ -3,6 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import '../../../app/globals.css';
 import { FiArrowLeft, FiCopy } from "react-icons/fi";
+import Footer1 from '@/components/footers/Footer1';
 
 export default function ConfirmDeposit() {
     const searchParams = useSearchParams();
@@ -34,7 +35,8 @@ export default function ConfirmDeposit() {
     };
 
     return (
-        <div className="bg-surface min-h-screen relative overflow-hidden text-white tf-container">
+        <>
+        <div className="bg-surface min-h-screen relative overflow-hidden text-white pb-12 tf-container">
             <div className='fixed top-0 left-0 right-0 z-30 bg-surface border-b border-white/5 tf-container max-w-2xl mx-auto'>
                 <div className='py-6 flex items-center justify-between'>
                     <a href='/deposit' className='flex items-center gap-2 text-white/70 hover:text-white transition-colors'>
@@ -126,5 +128,7 @@ export default function ConfirmDeposit() {
                 </div>
             </div>
         </div>
+        <Footer1/>
+        </>
     );
 }
