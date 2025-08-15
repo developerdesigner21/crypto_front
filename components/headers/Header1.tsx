@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notifications } from "@/data/notifications";
+import { useRouter } from "next/navigation";
 
 type HeaderProps = {
   coins: any[];
@@ -11,6 +12,7 @@ export default function Header1({ coins }: HeaderProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
   const [results, setResults] = useState<string[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -29,9 +31,7 @@ export default function Header1({ coins }: HeaderProps) {
         Object.keys(coin.unique_id)[0]
           .toLowerCase()
           .includes(debouncedValue.toLowerCase())
-      )
-      .map((coin) => Object.keys(coin.unique_id)[0]);
-
+      );
     setResults(filtered);
   }, [debouncedValue]);
 
@@ -87,24 +87,29 @@ export default function Header1({ coins }: HeaderProps) {
                       zIndex: 1000,
                     }}
                   >
-                    {results.map((item, idx) => (
-                      <div
-                        key={idx}
-                        style={{
-                          padding: "10px",
-                          cursor: "pointer",
-                          fontSize: "14px",
-                          borderBottom:
-                            idx !== results.length - 1 ? "1px solid #333" : "none",
-                        }}
-                        onClick={() => {
-                          setSearchTerm(item);
-                          setResults([]);
-                        }}
-                      >
-                        {item}
-                      </div>
-                    ))}
+                    {results.map((item, idx) => {
+                      const coinId = Object.keys(item?.unique_id)[0];
+                      return(
+                        <div
+                          key={idx}
+                          style={{
+                            padding: "10px",
+                            cursor: "pointer",
+                            fontSize: "14px",
+                            borderBottom:
+                              idx !== results.length - 1 ? "1px solid #333" : "none",
+                          }}
+                          onClick={() => {
+                            console
+                            setSearchTerm(item);
+                            setResults([]);
+                            router.push(`/coin/${item?.name}`)
+                          }}
+                        >
+                          {coinId}
+                        </div>
+                      )
+                    })}
                   </div>
                 ) : (
                   <div

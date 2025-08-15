@@ -1,5 +1,9 @@
+"use client"
+
 import React from 'react';
-import '../app/globals.css'
+import '../app/globals.css';
+import startImg from '../assets/start.png';
+import Image from 'next/image';
 
 const HeroHeader: React.FC = () => {
     return (
@@ -97,18 +101,26 @@ const HeroHeader: React.FC = () => {
                 {/* Image wrap (Main Dashboard Image) - Uses CDN image */}
                 {/* The original HTML had multiple SSR variants for this image; a single responsive img tag is usually sufficient with modern img attributes */}
                 <div className="relative w-full max-w-6xl mx-auto z-0 mt-8 md:mt-0"> {/* Relative for potential internal absolute positioning, max-w to control size, mx-auto to center, z-0 to stack correctly */}
-                    <img
+                    {/* <img
                         decoding="async"
                         src="https://framerusercontent.com/images/DbY7cvm12ymahzXVmnWsT0C1yA.webp"
                         alt="statistics dashboard"
                         className="w-full h-auto object-contain"
-                        // Retaining original srcset and sizes for proper responsive image loading
                         sizes="(min-width: 1440px) 1205px, (min-width: 810px) and (max-width: 1199px) calc((100vw - 60px) * 1.004), (min-width: 1200px) and (max-width: 1439px) calc(min(100vw - 80px, 1200px) * 1.0045), (max-width: 809px) calc(100vw - 40px)"
                         srcSet="https://framerusercontent.com/images/DbY7cvm12ymahzXVmnWsT0C1yA.webp?scale-down-to=512 512w,
                     https://framerusercontent.com/images/DbY7cvm12ymahzXVmnWsT0C1yA.webp?scale-down-to=1024 1024w,
                     https://framerusercontent.com/images/DbY7cvm12ymahzXVmnWsT0C1yA.webp?scale-down-to=2048 2048w,
                     https://framerusercontent.com/images/DbY7cvm12ymahzXVmnWsT0C1yA.webp 2403w"
-                    />
+                    /> */}
+                    <div className='relative w-full h-screen'>
+                        <Image 
+                            src={startImg}
+                            alt='statistics dashboard'
+                            fill
+                            className='object-cover'
+                            sizes="(min-width: 1440px) 1205px, (min-width: 810px) and (max-width: 1199px) calc((100vw - 60px) * 1.004), (min-width: 1200px) and (max-width: 1439px) calc(min(100vw - 80px, 1200px) * 1.0045), (max-width: 809px) calc(100vw - 40px)"
+                        />
+                    </div>
                 </div>
 
                 {/* Floating Crypto Icons - Positioned absolutely relative to the main container (div.container).

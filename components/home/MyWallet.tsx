@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AiOutlineSwap } from "react-icons/ai";
+import { AiOutlineCloseCircle, AiOutlineSwap } from "react-icons/ai";
 import { MdBackup } from "react-icons/md";
 import { BiCandles } from "react-icons/bi";
 import { SiBitcoin } from "react-icons/si";
@@ -25,7 +25,7 @@ export default function MyWallet() {
         }
       } catch (err) {
         console.error("Error in API call:", err);
-  // alert(err.response?.data?.msg || "Something went wrong");
+        // alert(err.response?.data?.msg || "Something went wrong");
       }
     };
     fetchWallets();
@@ -164,7 +164,15 @@ export default function MyWallet() {
           <ul className="mt-16 grid-4 m--16">
             <li>
               <Link
-                href={`/swap`}
+                href='#'
+                onClick={async (e) => {
+                  e.preventDefault();
+                  const bootstrap = await import("bootstrap");
+                  const botModalEl = document.getElementById("modalBot");
+                  if (!botModalEl) return;
+                  const myBotModal = new bootstrap.Modal(botModalEl);
+                  myBotModal.show();
+                }}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
@@ -175,7 +183,7 @@ export default function MyWallet() {
             </li>
             <li>
               <Link
-                href={`/buy`}
+                href={`/assets/index`}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
@@ -186,7 +194,7 @@ export default function MyWallet() {
             </li>
             <li>
               <Link
-                href={`/buy`}
+                href={`/minings/index`}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
@@ -197,7 +205,7 @@ export default function MyWallet() {
             </li>
             <li>
               <Link
-                href={`/earn`}
+                href={`/investments/index`}
                 className="tf-list-item d-flex flex-column gap-8 align-items-center"
               >
                 <span className="box-round bg-surface d-flex justify-content-center align-items-center">
@@ -273,6 +281,33 @@ export default function MyWallet() {
                 >
                   I Accept
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bot popup */}
+        <div
+          className="modal fade modalCenter"
+          id="modalBot"
+          tabIndex={-1}
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content rounded-lg shadow-lg border-0 text-center" style={{padding:"24px"}}>
+              <AiOutlineCloseCircle className="mx-auto text-red-500" size={80} />
+              <h4>Action Disabled</h4>
+              <p className="mt-8 text-large">
+                This Action is disabled Coming Soon.
+              </p>
+              <div style={{display:'inline-flex' ,marginTop:'20px', width: 'auto', textAlign: 'center', justifyContent:'center'}}>
+              <button
+                type="button"
+                data-bs-dismiss="modal"
+                style={{width: 'auto'}}
+              >
+                Okay
+              </button>
               </div>
             </div>
           </div>

@@ -146,7 +146,10 @@ export default function Rating({coins}:RatingProps) {
                   <li key={coin.id} className="mt-16">
                     <Link
                       href={`/coin/${coins}`}
-                      className="coin-item style-2 gap-12"
+                      className="coin-item style-2 gap-12 p-2"
+                      style={{marginBottom:"10px", transition: "background-color 0.2s ease", borderRadius:"4px"}}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#393737")}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "")}
                     >
                       <Image
                         alt="coin"

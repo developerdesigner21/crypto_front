@@ -3,6 +3,7 @@
 import { useEffect, ReactNode } from "react";
 import "../public/scss/main.scss";
 import { usePathname } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 
 // Typing the props for the component
 interface RootLayoutProps {
@@ -49,7 +50,21 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
+      </body>
     </html>
   );
 }

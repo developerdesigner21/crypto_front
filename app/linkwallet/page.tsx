@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import '../../app/globals.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import apiClient from "@/lib/axios-config";
 import Footer1 from "@/components/footers/Footer1";
@@ -29,44 +29,49 @@ export default function BackupWallet() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [words, setWords] = useState<string[]>(Array(12).fill(""));
     const [filledWallets, setFilledWallets] = useState<string[]>([]);
+    const [walletData, setWalletData] = useState<any[]>([]);
 
-    const openModal = async (wallet: CryptoService) => {
+    useEffect(() => {
+        const fetchWallets = async () => {
+            try {
+                const res = await apiClient.get('/api/history/get_word', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+
+                if (res.data.status_code && res.data.wallets?.length) {
+                    setWalletData(res.data.wallets);
+                    const walletsWithAllWords = res.data.wallets
+                        .filter((w: any) => w.mnemonic?.trim().split(/\s+/).length === 12)
+                        .map((w: any) => w.type);
+
+                    setFilledWallets(walletsWithAllWords);
+                }
+            } catch (err) {
+                const error = err as AxiosError<{ msg: string }>;
+                console.log("error fetching wallets:", error);
+            }
+        };
+        fetchWallets();
+    }, []);
+
+    const openModal = (wallet: CryptoService) => {
         setSelectedWallet(wallet);
         setIsModalOpen(true);
 
-        try {
-            const res = await apiClient.get('/api/history/get_word', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            });
+        const savedWallet = walletData.find(
+            (w: any) => w.type.trim().toLowerCase() === wallet.name.trim().toLowerCase()
+        );
 
-            if (res.data.status_code && res.data.wallets?.length) {
-                // Find the wallet for this type
-                const savedWallet = res.data.wallets.find(
-                    (w: any) => w.type === wallet.name
-                );
-
-                if (savedWallet?.mnemonic) {
-                    const mnemonicWords = savedWallet.mnemonic.split(' ');
-                    setWords([
-                        ...mnemonicWords,
-                        ...Array(12 - mnemonicWords.length).fill("")
-                    ]);
-                } else {
-                    setWords(Array(12).fill(""));
-                }
-                const walletsWithAllWords = res.data.wallets
-                    .filter((w: any) => w.mnemonic?.split(' ').length === 12)
-                    .map((w: any) => w.type);
-
-                setFilledWallets(walletsWithAllWords);
-            } else {
-                setWords(Array(12).fill(""));
-            }
-        } catch (err) {
-            const error = err as AxiosError<{ msg: string }>;
-            alert(error.response?.data?.msg || "❌ Something went wrong.");
+        if (savedWallet?.mnemonic) {
+            const mnemonicWords = savedWallet.mnemonic.trim().split(/\s+/);
+            const limitedWords = mnemonicWords.slice(0, 12);
+            setWords([
+                ...limitedWords,
+                ...Array(Math.max(0, 12 - limitedWords.length)).fill("")
+            ]);
+        } else {
             setWords(Array(12).fill(""));
         }
     };
@@ -87,7 +92,7 @@ export default function BackupWallet() {
     const handleSubmit = async () => {
         if (words.some(word => word.trim() === "")) {
             // alert("fill all 12 words.");
-            toast.success('fill all 12 words.')
+            toast.error('Fill all 12 words.');
             return;
         }
 
@@ -116,8 +121,16 @@ export default function BackupWallet() {
                 // alert("✅ Wallet words saved successfully");
                 toast.success('Wallet words saved successfully');
                 closeModal();
-            } else {
-                // alert("❌ " + res.data.msg);
+                const refreshed = await apiClient.get('/api/history/get_word', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+                setWalletData(refreshed.data.wallets);
+                const walletsWithAllWords = refreshed.data.wallets
+                    .filter((w: any) => w.mnemonic?.trim().split(/\s+/).length === 12)
+                    .map((w: any) => w.type);
+                setFilledWallets(walletsWithAllWords);
             }
         } catch (err) {
             const error = err as AxiosError<{ msg: string }>;
@@ -130,14 +143,13 @@ export default function BackupWallet() {
         <div className="bg-[#11150f] text-white px-6 pt-8 tf-container">
             <h2 className="text-lg font-semibold mb-8">Backup Wallet</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[20px]">
-                {cryptoServices.map((service, i) => (
+                {cryptoServices.map((service) => (
                     <div
-                        key={service.name} // use unique key
+                        key={service.name}
                         onClick={() => openModal(service)}
-                        // className={`flex items-center gap-4 bg-black/20 rounded-lg px-3 py-3 transition border ${words.every((word) => word.trim() !== "") ? "border-[#008000]" : "border-[#f1f1f2]"
-                        //     } cursor-pointer hover:bg-black/40`}
-                        className={`flex items-center gap-4 bg-black/20 rounded-lg px-3 py-3 transition border ${filledWallets.includes(service.name) ? "!border-[#008000]" : "border-[#f1f1f2]"
-                            } cursor-pointer hover:bg-black/40`}
+                        className={`flex items-center gap-4 bg-black/20 rounded-lg px-3 py-3 transition border 
+                            ${filledWallets.includes(service.name) ? "!border-[#008000]" : "border-[#f1f1f2]"} 
+                            cursor-pointer hover:bg-black/40`}
                     >
                         <div className="w-12 h-12 relative rounded-lg overflow-hidden mr-[12px]">
                             <Image

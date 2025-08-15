@@ -71,7 +71,7 @@ export default function SwapForm() {
 
   return (
     <>
-    <div className="flex justify-center items-center min-h-screen bg-black">
+    <div className="flex justify-center items-center min-h-screen bg-black tf-container">
       <div className="bg-[#111] p-6 rounded-2xl w-[420px] border border-gray-700">
 
         {/* Swap From */}

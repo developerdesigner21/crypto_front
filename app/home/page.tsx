@@ -26,8 +26,8 @@ const Page: React.FC = () => {
     <>
       <Header1 coins={coins} />
       <div className="pt-68 pb-80">
-        <MyWallet />
         <Market />
+        <MyWallet />
         <Rating coins={coins} />
       </div>{" "}
       <Footer1 />

@@ -156,6 +156,7 @@ export default function Rating() {
                   {coins.map((coin) => {
                     const coinName = Object.keys(coin.unique_id)[0];
                     const coinData = coin.unique_id[coinName];
+                    const coins = coin.name;
                     const coinlink = coin.link;
                     const price = coinData ? `$${coinData.usd.toLocaleString()}` : "N/A";
                     const change =
@@ -168,12 +169,16 @@ export default function Rating() {
                         : "decrease";
 
                     return (
-                      <li key={coin.id} className="mt-16">
+                      <li key={coin.id} className="mt-[64px]">
                         <Link
-                          href={`/choose-payment?symbol=${encodeURIComponent(
-                            coinlink
-                          )}&name=${encodeURIComponent(coinName)}`}
-                          className="coin-item style-2 gap-12"
+                          // href={`/choose-payment?symbol=${encodeURIComponent(
+                          //   coinlink
+                          // )}&name=${encodeURIComponent(coinName)}`}
+                          href={`coin/${coins}`}
+                          className="coin-item style-2 gap-12 p-2"
+                          style={{marginBottom:"10px", transition: "background-color 0.2s ease", borderRadius:"4px"}}
+                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#393737")}
+                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "")}
                         >
                           <Image
                             alt="coin"
