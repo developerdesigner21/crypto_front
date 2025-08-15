@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import apiClient from "@/lib/axios-config";
 export default function UserInfo() {
   const router = useRouter();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<any>();
   const [formData, setFormData] = useState({
     depositAddress: "GACMPQFBN6ZRTH4LZZVWB4XEFJEXYAP6U",
     xlmAmount: "$100,000",
@@ -42,8 +42,8 @@ export default function UserInfo() {
     if (user?.user) {
       setFormData((prev) => ({
         ...prev,
-        name: user.user.name || "",
-        email: user.user.email || "",
+        name: user?.user?.name || "",
+        email: user?.user?.email || "",
       }));
     }
   }, [user]);

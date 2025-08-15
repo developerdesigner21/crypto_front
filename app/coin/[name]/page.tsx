@@ -9,7 +9,7 @@ import Footer1 from '@/components/footers/Footer1';
 export default function CoinPage({ params }: { params: Promise<{ name: string }> }) {
   const { name } = use(params);
   const coinName = name;
-  const [data, setData] = useState<number | null>(null);
+  const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -1,11 +1,12 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import React from "react";
 import Link from "next/link";
 import GoBackButton from "@/components/BackButton";
 
-export default function ChoosePayment() {
+function ChoosePaymentContent() {
   const searchParams = useSearchParams();
   const symbol = searchParams.get("symbol");
   const Name = searchParams.get("name");
@@ -88,5 +89,13 @@ export default function ChoosePayment() {
         </ul>
       </div>
     </div>
+  );
+}
+
+export default function ChoosePayment() {
+  return (
+    <Suspense fallback={<div>Loading payment page...</div>}>
+      <ChoosePaymentContent />
+    </Suspense>
   );
 }

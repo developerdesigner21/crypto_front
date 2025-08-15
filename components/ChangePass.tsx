@@ -1,12 +1,12 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import apiClient from "@/lib/axios-config";
 import GoBackButton from "./BackButton";
 import { toast } from "react-toastify";
 
-export default function ChangePass() {
+function ChangePassword() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const router = useRouter();
@@ -105,4 +105,12 @@ export default function ChangePass() {
       </div>
     </>
   );
+}
+
+export default function ChangePass() {
+  return(
+    <Suspense>
+      <ChangePassword />
+    </Suspense>
+  )
 }

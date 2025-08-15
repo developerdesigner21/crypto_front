@@ -11,7 +11,7 @@ type HeaderProps = {
 export default function Header1({ coins }: HeaderProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
-  const [results, setResults] = useState<string[]>([]);
+  const [results, setResults] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {

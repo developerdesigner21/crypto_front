@@ -45,7 +45,7 @@ type Member = {
 
 export default function Wallet() {
   const [accountOption, setAccountOption] = useState<string>(accountOptions[0]);
-  const [coins, setCoins] = useState();
+  const [coins, setCoins] = useState<any>();
 
   useEffect(() => {
     const fetchWallets = async () => {
@@ -80,7 +80,7 @@ export default function Wallet() {
               </a> */}
             </h5>
             <h1 className="mt-16">
-              <a href="#">${(coins?.total_value ?? 0)?.toFixed(2)}</a>
+              <a href="#">${(coins ? coins?.total_value : 0)?.toFixed(2)}</a>
             </h1>
             <ul className="mt-16 grid-4 m--16">
               <li>
